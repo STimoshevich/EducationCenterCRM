@@ -48,7 +48,7 @@ namespace EducationCenterCRM.DAL.Initializer
 
             var group_1 = new Group() { Id = 1, StartDate = new DateTime(2021, 7, 20), Title = "first_group", Status = Enums.GroupStatus.Started, TeacherId = teacher_1.Id };
             var group_2 = new Group() { Id = 2, StartDate = new DateTime(2021, 10, 13), Title = "second_group", Status = Enums.GroupStatus.NotStarted, TeacherId = teacher_2.Id };
-            var group_3 = new DAL.Entities.Group() { Id = 3, StartDate = new DateTime(2021, 4, 5), Title = "third_group", Status = Enums.GroupStatus.Started, TeacherId = teacher_3.Id };
+            var group_3 = new Group() { Id = 3, StartDate = new DateTime(2021, 4, 5), Title = "third_group", Status = Enums.GroupStatus.Started, TeacherId = teacher_3.Id };
             var group_4 = new Group() { Id = 4, StartDate = new DateTime(2021, 12, 12), Title = "fourth_group", Status = Enums.GroupStatus.NotStarted, TeacherId = teacher_3.Id };
 
 

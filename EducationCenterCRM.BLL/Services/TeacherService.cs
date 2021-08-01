@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EducationCenterCRM.Services.BLL
 {
-    public class TeacherService
+    public class TeacherService : ITeacherService
     {
         private readonly UnitOfWork unitOfWork;
 
@@ -21,9 +21,9 @@ namespace EducationCenterCRM.Services.BLL
             return unitOfWork.teachersRepository.GetAll();
         }
 
-        public Teacher GetByIdOrDefault(int id,bool includeRelations)
+        public Teacher GetByIdOrDefault(int id, bool includeRelations)
         {
-            return unitOfWork.teachersRepository.GetByPredicateOrDefault(teacher=>teacher.Id == id, includeRelations);
+            return unitOfWork.teachersRepository.GetByPredicateOrDefault(teacher => teacher.Id == id, includeRelations);
         }
 
         public void DeleteById(int id)
@@ -46,7 +46,7 @@ namespace EducationCenterCRM.Services.BLL
         }
 
         public void Update(Teacher editedTeacher)
-        {      
+        {
             unitOfWork.teachersRepository.Update(editedTeacher);
             unitOfWork.Save();
 

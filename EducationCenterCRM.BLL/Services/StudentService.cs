@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace EducationCenterCRM.Services.BLL
 {
-    public class StudentService
+    public class StudentService : IStudentService
     {
         private readonly UnitOfWork unitOfWork;
 
@@ -16,7 +16,7 @@ namespace EducationCenterCRM.Services.BLL
         }
 
 
-       
+
         public void Update(Student editedStudent)
         {
             unitOfWork.studentsRepository.Update(editedStudent);
@@ -46,11 +46,11 @@ namespace EducationCenterCRM.Services.BLL
 
         public Student GetByIdOrDefault(int id, bool includeRelations)
         {
-            return unitOfWork.studentsRepository.GetByPredicateOrDefault(student=> student.Id == id, includeRelations: true);
+            return unitOfWork.studentsRepository.GetByPredicateOrDefault(student => student.Id == id, includeRelations);
         }
         public IEnumerable<Student> GetAll()
         {
-           return unitOfWork.studentsRepository.GetAll();
+            return unitOfWork.studentsRepository.GetAll();
         }
 
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EducationCenterCRM.Services.BLL
 {
-    public class GroupService
+    public class GroupService : IGroupService
     {
         private readonly UnitOfWork unitOfWork;
 
@@ -23,10 +23,10 @@ namespace EducationCenterCRM.Services.BLL
         }
         public Group GetByIdOrDefault(int id, bool includeRelations)
         {
-            return unitOfWork.groupsRepository.GetByPredicateOrDefault(group=>group.Id == id, includeRelations);
+            return unitOfWork.groupsRepository.GetByPredicateOrDefault(group => group.Id == id, includeRelations);
         }
 
-      
+
 
         public void DeleteById(int id)
         {
