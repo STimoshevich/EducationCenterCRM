@@ -3,6 +3,7 @@ using EducationCenterCRM.DAL.Infrastructure;
 using EducationCenterCRM.DAL.Entities;
 using System;
 using System.Collections.Generic;
+using EducationCenterCRM.Services.Interfaces.BLL;
 
 namespace EducationCenterCRM.Services.BLL
 {

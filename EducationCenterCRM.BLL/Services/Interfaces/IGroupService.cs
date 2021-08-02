@@ -1,7 +1,7 @@
 ﻿using EducationCenterCRM.DAL.Entities;
 using System.Collections.Generic;
 
-namespace EducationCenterCRM.Services.BLL
+namespace EducationCenterCRM.Services.Interfaces.BLL
 {
     public interface IGroupService
     {

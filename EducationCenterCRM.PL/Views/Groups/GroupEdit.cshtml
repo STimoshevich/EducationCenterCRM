@@ -31,7 +31,7 @@
             <div class="input-group mb-3">
                 <label class="input-group-text" for="selector_1">Teacher</label>
                 <select class="form-select" id="selector_1" asp-for="TeacherId">
-                     <option value="">@null</option>
+                     <option value="@null">Not set</option>
                     @foreach (var teacher in teacherService.GetAll())
                     {
                         <option value="@teacher?.Id">@teacher?.Name @teacher?.Lastname</option>
