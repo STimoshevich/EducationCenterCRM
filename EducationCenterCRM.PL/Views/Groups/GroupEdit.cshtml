@@ -9,15 +9,15 @@
         <form id="GroupInfoForm">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">@nameof(@Model.Id)</span>
-                <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="@nameof(@Model.Id)" aria-describedby="basic-addon1" value="@Model.Id" readonly>
+                <input type="text" class="form-control"  name="@nameof(@Model.Id)" aria-describedby="basic-addon1" value="@Model.Id" readonly>
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">@nameof(@Model.Title)</span>
-                <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="@nameof(@Model.Title)" aria-describedby="basic-addon1" value="@Model.Title">
+                <input type="text" class="form-control"  name="@nameof(@Model.Title)" aria-describedby="basic-addon1" value="@Model.Title">
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">@nameof(@Model.StartDate)</span>
-                <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="@nameof(@Model.StartDate)" aria-describedby="basic-addon1" value="@Model.StartDate.ToString("d")">
+                <input type="text" class="form-control"   name="@nameof(@Model.StartDate)" aria-describedby="basic-addon1" value="@Model.StartDate.ToString("d")">
             </div>
             <div class="input-group mb-3">
                 <label class="input-group-text" for="SelectStatys">Status</label>
@@ -31,7 +31,7 @@
             <div class="input-group mb-3">
                 <label class="input-group-text" for="selector_1">Teacher</label>
                 <select class="form-select" id="selector_1" asp-for="TeacherId">
-                     <option value="">@null</option>
+                     <option value="@null">Not set</option>
                     @foreach (var teacher in teacherService.GetAll())
                     {
                         <option value="@teacher?.Id">@teacher?.Name @teacher?.Lastname</option>
