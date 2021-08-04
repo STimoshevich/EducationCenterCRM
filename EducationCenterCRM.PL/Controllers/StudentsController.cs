@@ -82,9 +82,9 @@ namespace EducationCenterCRM.PresentationLayer.Controllers
                     studentService.AddNew(editedData);
                 else
                     studentService.Update(editedData);
-                return Ok();
+                return Content(""); // TODO:rework?
             }
-
+            
             return PartialView("StudentEdit", editedData);
 
         }
