@@ -72,36 +72,47 @@
             return obj;
         }
 
-        function updateByForm(formId) {
-            var objForSend = serializeFormToObject(formId);
-            $.post(current_page + "/updateorcreate/", {editedData: objForSend }, function (data, status) {
-    }).done(function (result) {
-        //  isDataChanged = true;
-        location.reload();
-            }).fail(function (result) {
-        $('div[id="Info_body"]').html(result);
-            });
+function updateByForm(formId) {
+    $.validator.unobtrusive.parse($('form[id="' + formId + '"]'));
+    if ($('form[id="' + formId + '"]').valid()) {
+        var objForSend = serializeFormToObject(formId);
+        $.post(current_page + "/updateorcreate/", { editedData: objForSend }, function (data, status) {
+        }).done(function (result) {
+            if (result === "") {
+                location.reload();
+            } else {
+                $('div[id="Info_body"]').html(result);
+            }
+           
+        });
+    } 
+}
+function updateByFormAndList(formId, listId) {
+    $.validator.unobtrusive.parse($('form[id="' + formId + '"]'));
+    if ($('form[id="' + formId + '"]').valid()) {
+        var objForSend = serializeFormToObject(formId);
+        objForSend[listId] = serializeListToArr(listId);
 
-        }
-        function updateByFormAndList(formId, listId, nameForListObject) {
-            var objForSend = serializeFormToObject(formId);
-            objForSend[nameForListObject] = serializeListToArr(listId);
+        $.post(current_page + "/updateorcreate/", { editedData: objForSend }, function (data, status) {
+        }).done(function (result) {
+            if (result === "") {
+                location.reload();
+            } else {
+                $('div[id="Info_body"]').html(result);
+            }
+        });
+    }
+  
+}
 
-            $.post(current_page + "/updateorcreate/", {editedData: objForSend }, function (data, status) {
-    }).done(function (result) {
-        // isDataChanged = true; 
-        location.reload();
-            }).fail(function (result) {
-        $('div[id="Info_body"]').html(result);
-            });
-        }
-        function serializeListToArr(listId) {
-        let arrOfObjects = [];
 
-            $('ul[id="' + listId + '"]').find('li').each(function (i, x) {
-        let new_obj = { };
-                new_obj.id = $(this).attr('id');
-                arrOfObjects.push(new_obj);
-            });
-            return arrOfObjects;
-        }
+function serializeListToArr(listId) {
+    let arrOfObjects = [];
+
+    $('ul[id="' + listId + '"]').find('li').each(function (i, x) {
+        let new_obj = {};
+        new_obj.id = $(this).attr('id');
+        arrOfObjects.push(new_obj);
+    });
+    return arrOfObjects;
+}
