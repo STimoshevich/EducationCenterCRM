@@ -5,19 +5,18 @@
 
 <div class="container">
     <div class="row">
-        <h1>Group info:</h1>
+        <h1>Group Info:</h1>
         <form id="GroupInfoForm">
             <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">@nameof(@Model.Id)</span>
-                <input type="text" class="form-control"  name="@nameof(@Model.Id)" aria-describedby="basic-addon1" value="@Model.Id" readonly>
+                <label asp-for="Id" class="input-group-text"></label>
+                <input asp-for="Id" class="form-control">
+                <span class="text-danger field-validation-error form-text" asp-validation-for="Id"></span>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">@nameof(@Model.Title)</span>
-                <input type="text" class="form-control"  name="@nameof(@Model.Title)" aria-describedby="basic-addon1" value="@Model.Title">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">@nameof(@Model.StartDate)</span>
-                <input type="text" class="form-control"   name="@nameof(@Model.StartDate)" aria-describedby="basic-addon1" value="@Model.StartDate.ToString("d")">
+                <label asp-for="Title" class="input-group-text"></label>
+                <input asp-for="Title" class="form-control">
+                <span class="text-danger field-validation-error" asp-validation-for="Title"></span>
+
             </div>
             <div class="input-group mb-3">
                 <label class="input-group-text" for="SelectStatys">Status</label>
@@ -31,7 +30,7 @@
             <div class="input-group mb-3">
                 <label class="input-group-text" for="selector_1">Teacher</label>
                 <select class="form-select" id="selector_1" asp-for="TeacherId">
-                     <option value="@null">Not set</option>
+                    <option value="@null">Not set</option>
                     @foreach (var teacher in teacherService.GetAll())
                     {
                         <option value="@teacher?.Id">@teacher?.Name @teacher?.Lastname</option>
@@ -39,30 +38,13 @@
 
                 </select>
             </div>
-        </form>       
-         
-            @if(Model.Students is not null)
-            {
-                   <div class="mb-3">
-                 <h1>Students:</h1>
-                <ul class="list-group" id="Students">
-                    @foreach (var student in @Model.Students)
-                    {
-                    <li class="list-group-item d-flex justify-content-between align-items-center" id="@student.Id">
-                        @student.Name
-                        @student.Lastname
-                        <button class="btn btn-primary" onclick="removeFromList('Students',@student.Id)">Delete</button>
-                    </li>
-                    }
+        </form>
 
-                </ul>
-            </div>
-            }
-            
-            <div class="input-group mb-3">
-                <button id="_save_changes" type="button" onclick="updateByFormAndList('GroupInfoForm','Students','Students')" class="btn btn-primary">Save changes</button>
-            </div>
-      
+
+        <div class="input-group mb-3">
+            <button id="_save_changes" type="button" onclick="updateByForm('GroupInfoForm')" class="btn btn-primary">Save changes</button>
+        </div>
+
     </div>
 
 </div>

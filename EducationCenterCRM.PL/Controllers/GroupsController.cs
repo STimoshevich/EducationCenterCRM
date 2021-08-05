@@ -84,7 +84,7 @@ namespace EducationCenterCRM.PresentationLayer.Controllers
                     groupService.AddNew(editedData);
                 else
                     groupService.Update(editedData);
-                return Ok();
+                return Content(""); // TODO:rework?
             }
 
             return PartialView("GroupEdit", editedData);
