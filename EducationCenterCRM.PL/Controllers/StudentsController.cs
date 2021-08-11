@@ -9,6 +9,7 @@ using EducationCenterCRM.Services.BLL;
 namespace EducationCenterCRM.PresentationLayer.Controllers
 {
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class StudentsController : Controller
     {
         private readonly StudentService studentService;
