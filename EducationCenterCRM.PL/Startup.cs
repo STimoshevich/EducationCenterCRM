@@ -9,6 +9,10 @@ using AutoMapper;
 using EducationCenterCRM.PresentationLayer.Mapper;
 using EducationCenterCRM.Services.BLL;
 using EducationCenterCRM.DAL.Infrastructure;
+using Microsoft.OpenApi.Models;
+using System.IO;
+using System.Reflection;
+using System;
 
 namespace EducationCenterCRM.PresentationLayer
 {
@@ -38,6 +42,17 @@ namespace EducationCenterCRM.PresentationLayer
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EducationCenterCRM.WebAPi", Version = "v1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
+           
         }
 
       
@@ -46,6 +61,13 @@ namespace EducationCenterCRM.PresentationLayer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "EducationCenterCRM.WebAPi v1");
+                    c.RoutePrefix = "apiDocumantations";
+                });
             }
             else
             {
