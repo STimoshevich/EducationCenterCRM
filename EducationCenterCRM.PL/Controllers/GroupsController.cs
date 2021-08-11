@@ -5,9 +5,11 @@ using System.Linq;
 using EducationCenterCRM.DAL.Entities;
 using System.Collections.Generic;
 using EducationCenterCRM.Services.BLL;
+using Newtonsoft.Json.Linq;
 
 namespace EducationCenterCRM.PresentationLayer.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class GroupsController : Controller
     {
         private readonly GroupService groupService;

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace EducationCenterCRM.PresentationLayer.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class TeachersController : Controller
     {
         private readonly TeacherService teacherService;
