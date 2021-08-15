@@ -14,6 +14,6 @@ namespace EducationCenterCRM.DAL.Entities
         [StringLength(100, ErrorMessage = "Lenght should be less than 100")]
         public string Bio { get; set; }
         public string LinkToProfile { get; set; }
-        public List<Group> Groups { get; set; }
+
     }
 }
