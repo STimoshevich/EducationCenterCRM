@@ -15,6 +15,7 @@ namespace EducationCenterCRM.DAL.Context
         public DbSet<Student> students { get; set; }
         public DbSet<Group> groups { get; set; }
         public DbSet<Teacher> teachers { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
 
