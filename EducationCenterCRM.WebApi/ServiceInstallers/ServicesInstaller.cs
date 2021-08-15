@@ -1,4 +1,6 @@
-﻿using EducationCenterCRM.Services.BLL;
+﻿using EducationCenterCRM.BLL.Services;
+using EducationCenterCRM.BLL.Services.Interfaces;
+using EducationCenterCRM.Services.BLL;
 using EducationCenterCRM.Services.Interfaces.BLL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,7 @@ namespace EducationCenterCRM.BLL.ServiceInstallers
         {
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IIdentityService, IdentityService>();
         }
     }
 }
