@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.DAL", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.PL", "EducationCenterCRM.PL\EducationCenterCRM.PL.csproj", "{34D15925-1AA4-4F66-B76A-90562DD12CE2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.WebApi", "EducationCenterCRM.WebApi\EducationCenterCRM.WebApi.csproj", "{6FD15F21-3219-4FDF-A888-203AB36C4608}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{34D15925-1AA4-4F66-B76A-90562DD12CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34D15925-1AA4-4F66-B76A-90562DD12CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34D15925-1AA4-4F66-B76A-90562DD12CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

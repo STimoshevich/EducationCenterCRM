@@ -1,58 +1,62 @@
-﻿using AutoMapper;
-using EducationCenterCRM.DAL.Infrastructure;
-using EducationCenterCRM.DAL.Entities;
-using System;
+﻿using EducationCenterCRM.Services.Interfaces.BLL;
+using System.Threading.Tasks;
+using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
 using System.Collections.Generic;
-using EducationCenterCRM.Services.Interfaces.BLL;
+using AutoMapper;
+using EducationCenterCRM.DAL.Infrastructure.Interfaces;
+using EducationCenterCRM.DAL.Entities;
+using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+using EducationCenterCRM.DAL.Infrastructure.Repositories;
+using System;
 
 namespace EducationCenterCRM.Services.BLL
 {
     public class StudentService : IStudentService
     {
-        private readonly UnitOfWork unitOfWork;
+        private readonly IRepository<Student> studentRepository;
+        private readonly IMapper mapper;
 
-        public StudentService(UnitOfWork unitOfWork)
+        public async Task<List<StudentResponse>> GetAllAsync()
         {
-            this.unitOfWork = unitOfWork;
+            var allGroups = await studentRepository.GetAllAsync();
+            return mapper.Map<List<StudentResponse>>(allGroups);
         }
 
-
-
-        public void Update(Student editedStudent)
+        public async Task<bool> AddNewAsync(StudentRequest studentRequest)
         {
-            unitOfWork.studentsRepository.Update(editedStudent);
-            unitOfWork.Save();
-        }
-
-        public void AddNew(Student student)
-        {
-            unitOfWork.studentsRepository.Add(student);
-            unitOfWork.Save();
-        }
-
-        public void DeleteById(int id)
-        {
-            if (id > 0)
+            //TODO: падает здесь
+            var added = 0;
+            if (studentRequest is not null)
             {
-                var result = unitOfWork.studentsRepository.GetByPredicateOrDefault(x => x.Id == id, includeRelations: false);
-                if (result is not null)
-                {
-                    unitOfWork.studentsRepository.Delete(result);
-
-                    unitOfWork.Save();
-                }
-
+                var newStudent = mapper.Map<Student>(studentRequest);
+                added = await studentRepository.AddAsync(newStudent);
             }
+            return added > 0 ? true: false ;
         }
 
-        public Student GetByIdOrDefault(int id, bool includeRelations)
+        public async Task<bool> UpdateAsync(int id,StudentRequest studentRequest)
         {
-            return unitOfWork.studentsRepository.GetByPredicateOrDefault(student => student.Id == id, includeRelations);
-        }
-        public IEnumerable<Student> GetAll()
-        {
-            return unitOfWork.studentsRepository.GetAll();
+            var updated = 0;
+            if (studentRequest is not null)
+{
+                var student = mapper.Map<Student>(studentRequest);
+                student.Id = id;
+                updated = await studentRepository.UpdateAsync(student);
+            }
+            return updated > 0 ? true : false;
         }
 
+        public async Task<bool> DeleteByIdAsync(int id)
+        {
+            var deleted = await studentRepository.DeleteAsync(id);
+            return deleted > 0 ? true : false;
+        }
+        public Task<StudentResponse> GetByIdAsync(int id)
+        {
+            //TODO: доделать
+            throw new NotImplementedException();
+        }
+
+   
     }
 }

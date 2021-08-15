@@ -1,5 +1,6 @@
 ﻿using EducationCenterCRM.DAL.Entities;
 using EducationCenterCRM.DAL.Initializer;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace EducationCenterCRM.DAL.Context
 {
-    public class EducationCenterDatabase : DbContext
+    public class EducationCenterDatabase : IdentityDbContext
     {
 
         public DbSet<Student> students { get; set; }
@@ -38,10 +39,9 @@ namespace EducationCenterCRM.DAL.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Group>().HasMany<Student>(x => x.Students).WithOne(x => x.Group);
-            modelBuilder.Entity<Group>().HasOne<Teacher>(x => x.Teacher).WithMany(x => x.Groups);
 
 
-            modelBuilder.Seed();
+          //  modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);
         }

@@ -47,7 +47,7 @@
                 <label class="input-group-text" for="selector_1">Group</label>
                 <select class="form-select" id="selector_1" asp-for="GroupId">
                     <option value="@null">Not set</option>
-                    @foreach (var group in groupService.GetAll())
+                    @foreach (var group in groupService.GetAllAsync())
                     {
                         <option value="@group.Id">@group.Title</option>
                     }

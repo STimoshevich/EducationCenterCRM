@@ -1,14 +1,17 @@
-﻿using EducationCenterCRM.DAL.Entities;
+﻿using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
+using EducationCenterCRM.DAL.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EducationCenterCRM.Services.Interfaces.BLL
 {
     public interface IStudentService
     {
-        void AddNew(Student student);
-        void DeleteById(int id);
-        IEnumerable<Student> GetAll();
-        Student GetByIdOrDefault(int id, bool includeRelations);
-        void Update(Student editedStudent);
+        Task<List<StudentResponse>> GetAllAsync();
+        Task<bool> AddNewAsync(StudentRequest studentRequest);
+        Task<bool> DeleteByIdAsync(int id);
+        Task<StudentResponse> GetByIdAsync(int id);
+        Task<bool> UpdateAsync(int id,StudentRequest studentRequest);
     }
 }

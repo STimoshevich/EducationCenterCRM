@@ -15,8 +15,5 @@ namespace EducationCenterCRM.DAL.Entities
         public int? GroupId { get; set; }
         public Group Group { get; set; }
 
-
-
-
     }
 }

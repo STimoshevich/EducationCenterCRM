@@ -8,12 +8,11 @@ namespace EducationCenterCRM.DAL.Infrastructure.Interfaces
 {
     public interface IRepository<T> where T : class 
     {
-        IEnumerable<T> GetAll();
-        void Add(T new_value);
-        void Delete(T Model);
-        void Update(T model);
-
-        T GetByPredicateOrDefault(Func<T, bool> predicate, bool includeRelations);
+        Task<List<T>> GetAllAsync();
+        Task<int> AddAsync(T new_value);
+        Task<int> DeleteAsync(int id);
+        Task<int> UpdateAsync(T model);
+        Task<T> GetByPredicateOrDefaultAsync(Func<T, bool> predicate);
 
 
 

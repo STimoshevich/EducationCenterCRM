@@ -34,7 +34,7 @@ namespace EducationCenterCRM.PL.Controllers.ApiControllers.V1
         [HttpGet(ApiRoutes.Group.GetAll)]
         public IActionResult GetAll()
         {
-            return Ok(groupService.GetAll());
+            return Ok(groupService.GetAllAsync());
         }
 
 
@@ -51,7 +51,7 @@ namespace EducationCenterCRM.PL.Controllers.ApiControllers.V1
         {
             if (id > 0)
             {
-                var group = groupService.GetByIdOrDefault(id, includeRelations: false);
+                var group = groupService.GetByIdOrDefaultAsync(id, includeRelations: false);
 
                 if (group is not null)
                 {
@@ -77,9 +77,9 @@ namespace EducationCenterCRM.PL.Controllers.ApiControllers.V1
 
             if (groupRequest is not null)
             {
-              var maxId =   groupService.GetAll().Max(x => x.Id); // TODO: rework
+              var maxId =   groupService.GetAllAsync().Max(x => x.Id); // TODO: rework
                 groupRequest.Id = maxId + 1;                        // TODO: rework
-                groupService.AddNew(groupRequest);
+                groupService.AddNewAsync(groupRequest);
                 var url = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(HttpContext.Request);
                 return Created(url + "/" + groupRequest.Id, groupRequest);
             }

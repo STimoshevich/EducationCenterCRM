@@ -15,32 +15,7 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
         {
         }
 
-        public override Teacher GetByPredicateOrDefault(Func<Teacher, bool> predicate, bool includeRelations)
-        {
-            if (predicate is not null)
-            {
-                var res = includeRelations ?
-               context.Set<Teacher>()
-               .Include(x => x.Groups)
-               .FirstOrDefault(predicate) : context.Set<Teacher>().FirstOrDefault(predicate);
 
-                return res;
-            }
-
-            return default;
-        }
-
-        public override void Update(Teacher model)
-        {
-            if (model is not null)
-            {
-                var res = table.FirstOrDefault(x => x.Id == model.Id);
-                if (res is not null)
-                {
-                    context.Entry(res).CurrentValues.SetValues(model);
-                }
-
-            }
-        }
+      
     }
 }

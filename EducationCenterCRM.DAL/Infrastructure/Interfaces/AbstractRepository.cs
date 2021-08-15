@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EducationCenterCRM.DAL.Infrastructure.Interfaces
@@ -17,29 +18,66 @@ namespace EducationCenterCRM.DAL.Infrastructure.Interfaces
             this.context = context;
             table = context.Set<T>();
         }
-        public virtual void Add(T new_value)
+        public virtual async Task<int> AddAsync(T new_value)
         {
+            int added = 0;
             if (new_value is not null)
-                table.Add(new_value);
+            {
+                await table.AddAsync(new_value);
+                added = await context.SaveChangesAsync();
+            }
+              
+            return added;
         }
 
      
 
-        public virtual void Delete(T model)
+        public virtual async Task<int> DeleteAsync( int id)
         {
-            if(model is not null)
-                table.Remove(model);
+            var deleted = 0;
+            if(id > 0)
+            {
+                var entity = await table.FindAsync(id);
+                if (entity is not null)
+                {
+                    table.Remove(entity);
+                    deleted = await context.SaveChangesAsync();
+                }
+                table.Remove(entity);
+                 deleted = await context.SaveChangesAsync();
+            }
+            return deleted;
+              
         }
       
 
-        public virtual IEnumerable<T> GetAll()
+        public virtual async Task<List<T>> GetAllAsync()
         {
-            return table.AsNoTracking();
+            return await table.AsNoTracking().ToListAsync();
         }
 
-        public abstract T GetByPredicateOrDefault(Func<T, bool> predicate, bool includeRelations);
+        public virtual  async Task<T> GetByPredicateOrDefaultAsync(Func<T, bool> predicate)
+        {
+            if(predicate is not null)
+            {
+                return await context.Set<T>().FindAsync(predicate);
+            }
+            return null;
+        }
 
-        public abstract void Update(T model);
+
+        public virtual async Task<int> UpdateAsync(T model)
+        {
+            int updated = 0;
+            if(model is not null)
+            {
+                table.Update(model);
+                updated = await context.SaveChangesAsync();
+            }
+            return updated;
+          
+        }
+
     }
 
 }

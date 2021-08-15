@@ -1,14 +1,16 @@
-﻿using EducationCenterCRM.DAL.Entities;
+﻿using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EducationCenterCRM.Services.Interfaces.BLL
 {
     public interface IGroupService
     {
-        void AddNew(Group group);
-        void DeleteById(int id);
-        IEnumerable<Group> GetAll();
-        Group GetByIdOrDefault(int id, bool includeRelations);
-        void Update(Group editedGroup);
+        Task<List<GroupResponse>> GetAllAsync();
+        Task<bool> AddNewAsync(GroupRequest groupRequest);
+        Task<bool> DeleteByIdAsync(int id);
+        Task<GroupResponse> GetByIdAsync(int id);
+        Task<bool> UpdateAsync(int id,GroupRequest groupRequest);
     }
 }

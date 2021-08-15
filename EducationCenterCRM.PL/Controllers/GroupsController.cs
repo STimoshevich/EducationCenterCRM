@@ -26,7 +26,7 @@ namespace EducationCenterCRM.PresentationLayer.Controllers
         [Route("/[controller]")]
         public IActionResult GetAll()
         {
-            var group = mapper.Map<IEnumerable<GroupViewModel>>(groupService.GetAll()).OrderBy(x => x.Id);
+            var group = mapper.Map<IEnumerable<GroupViewModel>>(groupService.GetAllAsync()).OrderBy(x => x.Id);
 
             return View("MainList", group);
         }
@@ -36,7 +36,7 @@ namespace EducationCenterCRM.PresentationLayer.Controllers
         {
             if (id > 0)
             {
-                var group = groupService.GetByIdOrDefault(id,includeRelations: true);
+                var group = groupService.GetByIdOrDefaultAsync(id,includeRelations: true);
 
                 if (group is not null)
                 {
@@ -66,7 +66,7 @@ namespace EducationCenterCRM.PresentationLayer.Controllers
         {
             if (id > 0)
             {
-                var group = groupService.GetByIdOrDefault(id, includeRelations: true);
+                var group = groupService.GetByIdOrDefaultAsync(id, includeRelations: true);
 
                 if (group is not null)
                     return PartialView("GroupEdit", group);
@@ -82,8 +82,8 @@ namespace EducationCenterCRM.PresentationLayer.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (groupService.GetByIdOrDefault(editedData.Id, includeRelations: false) is null)
-                    groupService.AddNew(editedData);
+                if (groupService.GetByIdOrDefaultAsync(editedData.Id, includeRelations: false) is null)
+                    groupService.AddNewAsync(editedData);
                 else
                     groupService.Update(editedData);
                 return Content(""); // TODO:rework?

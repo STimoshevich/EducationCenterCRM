@@ -1,76 +1,66 @@
-﻿using EducationCenterCRM.DAL.Infrastructure;
-using EducationCenterCRM.DAL.Entities;
-using System;
+﻿using EducationCenterCRM.DAL.Entities;
+using EducationCenterCRM.DAL.Infrastructure.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System;
 using EducationCenterCRM.Services.Interfaces.BLL;
+using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
+using AutoMapper;
+using System.Linq;
 
 namespace EducationCenterCRM.Services.BLL
 {
     public class GroupService : IGroupService
     {
-        private readonly UnitOfWork unitOfWork;
+        private readonly IRepository<Group> groupRepository;
+        private readonly IMapper mapper;
 
-        public GroupService(UnitOfWork unitOfWork)
+        public GroupService(IRepository<Group> groupRepository, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork;
-        }
-
-        public IEnumerable<Group> GetAll()
-        {
-            return unitOfWork.groupsRepository.GetAll();
-        }
-        public Group GetByIdOrDefault(int id, bool includeRelations)
-        {
-            return unitOfWork.groupsRepository.GetByPredicateOrDefault(group => group.Id == id, includeRelations);
+            this.groupRepository = groupRepository;
+            this.mapper = mapper;
         }
 
 
-
-        public void DeleteById(int id)
+        public async Task<List<GroupResponse>> GetAllAsync()
         {
-            if (id > 0)
+            var allGroups = await groupRepository.GetAllAsync();          
+            return mapper.Map<List<GroupResponse>>(allGroups);
+        }
+
+        public async Task<bool> AddNewAsync(GroupRequest groupRequest)
+        {
+            var added = 0;
+            if (groupRequest is not null)
             {
-                var group = unitOfWork.groupsRepository.GetByPredicateOrDefault(x => x.Id == id, includeRelations: false);
-                if (group is not null)
-                {
-                    unitOfWork.groupsRepository.Delete(group);
-
-                    unitOfWork.Save();
-                }
-
+               var group =  mapper.Map<Group>(groupRequest);
+                added = await groupRepository.AddAsync(group);
             }
-        }
-        public void AddNew(Group group)
-        {
-            unitOfWork.groupsRepository.Add(group);
-            unitOfWork.Save();
+            return added > 0 ? true : false;
         }
 
-        public void Update(Group editedGroup)
+        public async Task<bool> UpdateAsync(int id,GroupRequest groupRequest)
         {
-            var oldGroupValue = unitOfWork.groupsRepository.GetByPredicateOrDefault(x => x.Id == editedGroup.Id, includeRelations: true);
+            var updated = 0;
+            if (groupRequest is not null)
+            {
+                var newGroup = mapper.Map<Group>(groupRequest);
+                newGroup.Id = id;
+                updated = await groupRepository.UpdateAsync(newGroup);
+            }
+            return updated > 0 ? true : false;
+        }
 
-            if (oldGroupValue?.Students is not null)
-                for (int i = 0; i < oldGroupValue.Students.Count;)
-                {
-                    var res = editedGroup?.Students?.FirstOrDefault(x => x.Id == oldGroupValue.Students[i].Id);
-                    if (res is null)
-                        oldGroupValue.Students.Remove(oldGroupValue.Students[i]);
-                    else
-                        i++;
-                }
-
-            editedGroup.Students = oldGroupValue?.Students;
-
-
-            unitOfWork.groupsRepository.Update(editedGroup);
-            unitOfWork.Save();
-
-
-
+        public async Task<bool> DeleteByIdAsync(int id)
+        {
+            var deleted = await groupRepository.DeleteAsync(id);
+            return deleted > 0 ? true: false;
+        }
+        public Task<GroupResponse> GetByIdAsync(int id)
+        {
+            //TODO: доделать
+            throw new NotImplementedException();
         }
     }
 }
