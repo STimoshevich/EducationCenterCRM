@@ -1,6 +1,8 @@
 ﻿using EducationCenterCRM.BLL.Contracts.V1;
 using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
 using EducationCenterCRM.Services.Interfaces.BLL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace EducationCenterCRM.BLL.Controllers.V1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class GroupsController : Controller
     {
