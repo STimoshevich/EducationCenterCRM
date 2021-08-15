@@ -31,6 +31,14 @@ namespace EducationCenterCRM.BLL.Contracts.V1
             public const string Delete = Base + "/students/{id}";
         }
 
-      
+        public static class Identity
+        {
+            public const string Register = Base + "/registration";
+            public const string Login = Base + "/login";
+            public const string Refresh = Base + "/refreshToken";
+        }
+
+
+
     }
 }
