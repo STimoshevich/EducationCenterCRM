@@ -16,6 +16,12 @@ namespace EducationCenterCRM.Services.BLL
         private readonly IRepository<Student> studentRepository;
         private readonly IMapper mapper;
 
+        public StudentService(IRepository<Student> studentRepository, IMapper mapper)
+        {
+            this.studentRepository = studentRepository;
+            this.mapper = mapper;
+        }
+
         public async Task<List<StudentResponse>> GetAllAsync()
         {
             var allGroups = await studentRepository.GetAllAsync();
@@ -51,10 +57,10 @@ namespace EducationCenterCRM.Services.BLL
             var deleted = await studentRepository.DeleteAsync(id);
             return deleted > 0 ? true : false;
         }
-        public Task<StudentResponse> GetByIdAsync(int id)
+        public async Task<StudentResponse> GetByIdAsync(int id)
         {
-            //TODO: доделать
-            throw new NotImplementedException();
+            var student = await studentRepository.GetByPredicateOrDefaulAsync(predicate: x => x.Id == id);
+            return mapper.Map<StudentResponse>(student);
         }
 
    

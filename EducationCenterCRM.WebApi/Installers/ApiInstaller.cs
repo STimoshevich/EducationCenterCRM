@@ -1,31 +1,27 @@
 ﻿using EducationCenterCRM.BLL.Options;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Converters;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace EducationCenterCRM.BLL.ServiceInstallers
+namespace EducationCenterCRM.BLL.Installers
 {
     public class ApiInstaller : IInstaller
     {
         public void InstallServiecs(IConfiguration configuration, IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(config=> config.RegisterValidatorsFromAssemblyContaining<Startup>());
 
 
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(jwtSettings), jwtSettings);
-
             services.AddSingleton(jwtSettings);
 
             var tokenValidationParameters = new TokenValidationParameters()
@@ -57,7 +53,6 @@ namespace EducationCenterCRM.BLL.ServiceInstallers
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EducationCenterCRM.WebApi", Version = "v1" });
-
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
