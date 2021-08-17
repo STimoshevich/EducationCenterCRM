@@ -1,4 +1,4 @@
-﻿using EducationCenterCRM.BLL.ServiceInstallers;
+﻿using EducationCenterCRM.BLL.Installers;
 using EducationCenterCRM.DAL.Entities;
 using EducationCenterCRM.DAL.Infrastructure.Interfaces;
 using EducationCenterCRM.DAL.Infrastructure.Repositories;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EducationCenterCRM.WebApi.ServiceInstallers
+namespace EducationCenterCRM.WebApi.Installers
 {
     public class RepositoriesInstaller : IInstaller
     {

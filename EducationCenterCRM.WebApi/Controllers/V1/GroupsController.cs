@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace EducationCenterCRM.BLL.Controllers.V1
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+   // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class GroupsController : Controller
     {
@@ -30,15 +30,15 @@ namespace EducationCenterCRM.BLL.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Groups.Get)]
-        public async Task<IActionResult> GetById([FromQuery] int Id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await groupService.GetByIdAsync(Id));
+            return Ok(await groupService.GetByIdAsync(id));
         }
 
         [HttpDelete(ApiRoutes.Groups.Delete)]
-        public async Task<IActionResult> DeleteById([FromQuery] int Id)
+        public async Task<IActionResult> DeleteById(int id)
         {
-            var deleted = await groupService.DeleteByIdAsync(Id);
+            var deleted = await groupService.DeleteByIdAsync(id);
             return deleted? NoContent() : NotFound();
         }
 

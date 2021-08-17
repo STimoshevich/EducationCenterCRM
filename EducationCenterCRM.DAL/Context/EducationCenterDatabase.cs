@@ -23,8 +23,9 @@ namespace EducationCenterCRM.DAL.Context
 
         public EducationCenterDatabase(DbContextOptions options) : base(options)
         {
-
+         
             Database.EnsureCreated();
+          
         }
 
         protected EducationCenterDatabase()
@@ -35,6 +36,7 @@ namespace EducationCenterCRM.DAL.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.LogTo(System.Console.WriteLine);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,7 +44,7 @@ namespace EducationCenterCRM.DAL.Context
             modelBuilder.Entity<Group>().HasMany<Student>(x => x.Students).WithOne(x => x.Group);
 
 
-          //  modelBuilder.Seed();
+            modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);
         }
