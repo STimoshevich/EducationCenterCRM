@@ -19,29 +19,34 @@ namespace EducationCenterCRM.DAL.Context
 
 
 
-
+        protected EducationCenterDatabase()
+        {
+        }
 
         public EducationCenterDatabase(DbContextOptions options) : base(options)
         {
-         
+
+        
             Database.EnsureCreated();
           
         }
 
-        protected EducationCenterDatabase()
-        {
-        }
+       
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.LogTo(System.Console.WriteLine);
+           // optionsBuilder.LogTo(System.Console.WriteLine);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Group>().HasMany<Student>(x => x.Students).WithOne(x => x.Group);
+            modelBuilder
+                .Entity<Group>()
+                .HasMany<Student>(x => x.Students)
+                .WithOne(x => x.Group)
+                .OnDelete(DeleteBehavior.SetNull);
 
 
             modelBuilder.Seed();

@@ -8,8 +8,7 @@ using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
 using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
 using AutoMapper;
 using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+using EducationCenterCRM.DAL.Infrastructure.Repositories;
 
 namespace EducationCenterCRM.Services.BLL
 {
@@ -60,7 +59,7 @@ namespace EducationCenterCRM.Services.BLL
             return deleted > 0 ? true: false;
         }
         public async Task<GroupResponse> GetByIdAsync(int id)
-        {
+{
             var group = await groupRepository.GetByPredicateOrDefaulAsync(predicate: x => x.Id == id);
             return mapper.Map<GroupResponse>(group);
         }
