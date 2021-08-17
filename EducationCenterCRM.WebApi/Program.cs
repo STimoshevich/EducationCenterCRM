@@ -1,5 +1,8 @@
+using EducationCenterCRM.BLL.Contracts.V1;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,9 +14,33 @@ namespace EducationCenterCRM.BLL
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+           var host =  CreateHostBuilder(args).Build();
+
+            using (var serviceScope = host.Services.CreateScope())
+            {
+                var rolemanager = serviceScope
+                    .ServiceProvider
+                    .GetService<RoleManager<IdentityRole>>();
+
+                if(!await rolemanager.RoleExistsAsync(ApplicationRolles.Admin))
+                {
+                    var admin = new IdentityRole(ApplicationRolles.Admin);
+                    await rolemanager.CreateAsync(admin);
+                }
+                if (!await rolemanager.RoleExistsAsync(ApplicationRolles.Manager))
+                {
+                    var manager = new IdentityRole(ApplicationRolles.Manager);
+                    await rolemanager.CreateAsync(manager);
+                }
+               
+            }
+
+         
+
+
+           await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
