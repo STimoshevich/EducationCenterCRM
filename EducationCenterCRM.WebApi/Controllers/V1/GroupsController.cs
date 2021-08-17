@@ -29,12 +29,15 @@ namespace EducationCenterCRM.BLL.Controllers.V1
             return Ok(await groupService.GetAllAsync());
         }
 
+        [Authorize(Roles = ApplicationRolles.Admin)]
+        [Authorize(Roles = ApplicationRolles.Manager)]
         [HttpGet(ApiRoutes.Groups.Get)]
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await groupService.GetByIdAsync(id));
         }
 
+        [Authorize(Roles = ApplicationRolles.Admin)]
         [HttpDelete(ApiRoutes.Groups.Delete)]
         public async Task<IActionResult> DeleteById(int id)
         {
@@ -42,12 +45,16 @@ namespace EducationCenterCRM.BLL.Controllers.V1
             return deleted? NoContent() : NotFound();
         }
 
+        [Authorize(Roles = ApplicationRolles.Admin)]
+        [Authorize(Roles = ApplicationRolles.Manager)]
         [HttpPost(ApiRoutes.Groups.Create)]
         public async Task<IActionResult> CreateNew([FromBody]GroupRequest groupRequest)
         {
             var created = await groupService.AddNewAsync(groupRequest);
             return created? Ok() : BadRequest(new { error = "Unable to create group" });
         }
+        [Authorize(Roles = ApplicationRolles.Admin)]
+        [Authorize(Roles = ApplicationRolles.Manager)]
         [HttpPut(ApiRoutes.Groups.Update)]
         public async Task<IActionResult> Update([FromQuery] int Id,[FromBody] GroupRequest groupRequest)
         {
