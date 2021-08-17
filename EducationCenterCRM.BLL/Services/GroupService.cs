@@ -8,6 +8,8 @@ using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
 using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
 using AutoMapper;
 using System.Linq;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace EducationCenterCRM.Services.BLL
 {
@@ -57,10 +59,10 @@ namespace EducationCenterCRM.Services.BLL
             var deleted = await groupRepository.DeleteAsync(id);
             return deleted > 0 ? true: false;
         }
-        public Task<GroupResponse> GetByIdAsync(int id)
+        public async Task<GroupResponse> GetByIdAsync(int id)
         {
-            //TODO: доделать
-            throw new NotImplementedException();
+            var group = await groupRepository.GetByPredicateOrDefaulAsync(predicate: x => x.Id == id);
+            return mapper.Map<GroupResponse>(group);
         }
     }
 }

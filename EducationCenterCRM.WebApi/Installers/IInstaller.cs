@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EducationCenterCRM.BLL.ServiceInstallers
+namespace EducationCenterCRM.BLL.Installers
 {
     public interface IInstaller
     {

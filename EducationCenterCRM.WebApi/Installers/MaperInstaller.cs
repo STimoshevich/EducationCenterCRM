@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EducationCenterCRM.BLL.ServiceInstallers;
+using EducationCenterCRM.BLL.Installers;
 using EducationCenterCRM.PresentationLayer.Mapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

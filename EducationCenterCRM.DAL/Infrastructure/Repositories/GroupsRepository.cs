@@ -1,5 +1,4 @@
-﻿using EducationCenterCRM.DAL.Infrastructure.Interfaces;
-using EducationCenterCRM.DAL.Entities;
+﻿using EducationCenterCRM.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using EducationCenterCRM.DAL.Context;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EducationCenterCRM.DAL.Infrastructure.Repositories
 {
@@ -17,7 +19,7 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
         public GroupsRepository(EducationCenterDatabase context) : base(context)
         {
         }
-     
 
+        
     }
 }

@@ -1,5 +1,4 @@
-﻿using EducationCenterCRM.DAL.Infrastructure.Interfaces;
-using EducationCenterCRM.DAL.Entities;
+﻿using EducationCenterCRM.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
