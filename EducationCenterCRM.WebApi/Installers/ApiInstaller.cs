@@ -19,6 +19,11 @@ namespace EducationCenterCRM.BLL.Installers
             services.AddControllers()
                 .AddFluentValidation(config=> config.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+            var identitySettings = new IdentitySettings();
+            configuration.Bind(nameof(identitySettings), identitySettings);
+            services.AddSingleton(identitySettings);
+            
+
 
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(jwtSettings), jwtSettings);

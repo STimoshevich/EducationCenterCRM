@@ -1,4 +1,5 @@
 ﻿using EducationCenterCRM.BLL.Contracts;
+using EducationCenterCRM.BLL.Contracts.V1;
 using EducationCenterCRM.BLL.Options;
 using EducationCenterCRM.BLL.Services.Interfaces;
 using EducationCenterCRM.DAL.Context;
@@ -21,15 +22,20 @@ namespace EducationCenterCRM.BLL.Services
         private readonly JwtSettings jwtSettings;
         private readonly TokenValidationParameters tokenValidationParameters;
         private readonly EducationCenterDatabase dataContext;
+        private readonly IdentitySettings identitySettings;
+        private readonly RoleManager<IdentityRole> roleManager;
 
         public IdentityService
             (UserManager<IdentityUser> userManager, JwtSettings jwtSettings,
-            TokenValidationParameters tokenValidationParameters, EducationCenterDatabase dataContext)
+            TokenValidationParameters tokenValidationParameters, EducationCenterDatabase dataContext,
+            IdentitySettings identitySettings, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.jwtSettings = jwtSettings;
             this.tokenValidationParameters = tokenValidationParameters;
             this.dataContext = dataContext;
+            this.identitySettings = identitySettings;
+            this.roleManager = roleManager;
         }
 
         public async Task<AuthentificationResult> LoginAsync(string email, string password)
@@ -179,9 +185,20 @@ namespace EducationCenterCRM.BLL.Services
                 UserName = email
             };
 
-
-
             var createdUser = await userManager.CreateAsync(newUser, password);
+
+            if (createdUser.Succeeded)
+            {
+
+                if (identitySettings.AdminEmails.Contains(newUser.Email))
+                {
+                    var res = await userManager.AddToRoleAsync(newUser, ApplicationRolles.Admin);
+                }
+                if (identitySettings.ManagerEmails.Contains(newUser.Email))
+                    await userManager.AddToRoleAsync(newUser, ApplicationRolles.Manager);
+            }
+
+
 
 
 
@@ -210,6 +227,12 @@ namespace EducationCenterCRM.BLL.Services
 
             var userClaims = await userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

@@ -48,8 +48,6 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
                     table.Remove(entity);
                     deleted = await context.SaveChangesAsync();
                 }
-                table.Remove(entity);
-                deleted = await context.SaveChangesAsync();
             }
             return deleted;
 
@@ -60,6 +58,8 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
         {
             return await table.AsNoTracking().ToListAsync();
         }
+
+
         public virtual async Task<T> GetByPredicateOrDefaulAsync(
           Expression<Func<T, bool>> predicate,
           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,

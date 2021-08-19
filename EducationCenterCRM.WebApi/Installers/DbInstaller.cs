@@ -19,6 +19,7 @@ namespace EducationCenterCRM.BLL.Installers
           services.AddDbContext<EducationCenterDatabase>(options=>
             options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EducationCenter;Trusted_Connection=True;"));
             services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<EducationCenterDatabase>();
         }
     }
