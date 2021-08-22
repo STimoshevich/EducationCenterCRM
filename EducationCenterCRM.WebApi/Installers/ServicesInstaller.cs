@@ -19,6 +19,9 @@ namespace EducationCenterCRM.BLL.Installers
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ITopicService, TopicService>();
         }
     }
 }

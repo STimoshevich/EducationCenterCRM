@@ -193,8 +193,8 @@ namespace EducationCenterCRM.BLL.Services
         {
             var userRoles = await userManager.GetRolesAsync(user);
 
-            List<string> adminEmails = identitySettings.Get().AdminEmails;
-            List<string> managerEmails = identitySettings.Get().ManagerEmails;
+            List<string> adminEmails = identitySettings.Get().AdminsEmails;
+            List<string> managerEmails = identitySettings.Get().ManagersEmails;
 
             await CompareAndAddRolesAsync(adminEmails, ApplicationRolles.Admin);
             await CompareAndRemoveRolesAsync(adminEmails,ApplicationRolles.Admin);
