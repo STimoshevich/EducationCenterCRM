@@ -1,37 +1,98 @@
-﻿using EducationCenterCRM.BLL.Contracts.V1;
-using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+﻿using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
 using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
+using EducationCenterCRM.BLL.Contracts.V1;
 using EducationCenterCRM.BLL.Services.Interfaces;
 using EducationCenterCRM.DAL.Entities;
-using EducationCenterCRM.Services.BLL;
-using EducationCenterCRM.Services.Interfaces.BLL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Serilog;
+using EducationCenterCRM.Services.BLL;
 
-namespace EducationCenterCRM.BLL.Controllers.V1
+namespace EducationCenterCRM.WebApi.Controllers.V1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
-    public class StudentController : Controller
+    public class TeacherController : Controller
     {
-        private readonly IStudentService studentService;
+        private readonly ITeacherService teacherService;
 
-        public StudentController(IStudentService studentService)
+        public TeacherController(ITeacherService teacherService)
         {
-            this.studentService = studentService;
+            this.teacherService = teacherService;
         }
 
-        [HttpGet(ApiRoutes.Students.GetAll)]
+        [HttpGet(ApiRoutes.Teachers.GetAll)]
         public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(await studentService.GetAllAsync());
+                return Ok(await teacherService.GetAllAsync());
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
+            {
+                Log.Error(ex?.Message);
+                Log.Error(ex?.InnerException?.Message);
+
+                return BadRequest();
+            }
+           
+        }
+
+        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [HttpGet(ApiRoutes.Teachers.Get)]
+        public async Task<IActionResult> GetById(int id )
+        {
+            try
+            {
+                var result = await teacherService.GetByIdAsync(id);
+                return result is not null ? Ok(result) : NotFound();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error(ex?.Message);
+                Log.Error(ex?.InnerException?.Message);
+
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [HttpDelete(ApiRoutes.Teachers.Delete)]
+        public async Task<IActionResult> DeleteById([FromQuery] int Id)
+        {
+            try
+            {
+                var deleted = await teacherService.DeleteByIdAsync(Id);
+                return deleted ? NoContent() : NotFound();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex?.Message);
+                Log.Error(ex?.InnerException?.Message);
+
+                return BadRequest();
+            }
+           
+        }
+
+
+        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [HttpPost(ApiRoutes.Teachers.Create)]
+        public async Task<IActionResult> CreateNew([FromBody] TeacherRequest teacherRequest)
+        {
+            try
+            {
+                var created = await teacherService.AddNewAsync(teacherRequest);
+                return created ? Ok() : BadRequest(new { error = "Unable to create teacher" });
+            }
+            catch (Exception ex)
             {
                 Log.Error(ex?.Message);
                 Log.Error(ex?.InnerException?.Message);
@@ -42,81 +103,22 @@ namespace EducationCenterCRM.BLL.Controllers.V1
         }
 
         [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
-        [HttpGet(ApiRoutes.Students.Get)]
-        public async Task<IActionResult> GetById(int id)
+        [HttpPut(ApiRoutes.Teachers.Update)]
+        public async Task<IActionResult> Update([FromQuery] int Id, [FromBody] TeacherRequest teacherRequest)
         {
             try
             {
-                var result = await studentService.GetByIdAsync(id);
-                return result is not null ? Ok(result) : NotFound();
-            }
-            catch (System.Exception ex)
-            {
-                Log.Error(ex?.Message);
-                Log.Error(ex?.InnerException?.Message);
-
-                return BadRequest();
-            }
-
-        }
-
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
-        [HttpDelete(ApiRoutes.Students.Delete)]
-        public async Task<IActionResult> DeleteById([FromQuery] int Id)
-        {
-            try
-            {
-                var deleted = await studentService.DeleteByIdAsync(Id);
-                return deleted ? NoContent() : NotFound();
-            }
-            catch (System.Exception ex)
-            {
-                Log.Error(ex?.Message);
-                Log.Error(ex?.InnerException?.Message);
-
-                return BadRequest();
-            }
-           
-        }
-
-
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
-        [HttpPost(ApiRoutes.Students.Create)]
-        public async Task<IActionResult> CreateNew([FromBody] StudentRequest studentRequest)
-        {
-            try
-            {
-                var created = await studentService.AddNewAsync(studentRequest);
-                return created ? Ok() : BadRequest(new { error = "Unable to create student" });
-            }
-            catch (System.Exception ex)
-            {
-                Log.Error(ex?.Message);
-                Log.Error(ex?.InnerException?.Message);
-
-                return BadRequest();
-            }
-           
-        }
-
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
-        [HttpPut(ApiRoutes.Students.Update)]
-        public async Task<IActionResult> Update([FromQuery] int Id, [FromBody] StudentRequest studentRequest)
-        {
-            try
-            {
-                var updated = await studentService.UpdateAsync(Id, studentRequest);
+                var updated = await teacherService.UpdateAsync(Id, teacherRequest);
                 return updated ? Ok() : NotFound();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-
                 Log.Error(ex?.Message);
                 Log.Error(ex?.InnerException?.Message);
 
                 return BadRequest();
             }
-           
+          
         }
     }
 }
