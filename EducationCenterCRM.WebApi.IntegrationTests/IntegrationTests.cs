@@ -63,10 +63,16 @@ namespace EducationCenterCRM.WebApi.IntegrationTests
 
             var newUser = new UserRegistrationRequest()
             {
-                Email = "newEmail@gmail.com",
-                Password = "NewPassword1234!"
+                Email = "admin1@gmail.com",
+                Password = "Admin131067!"
             };
+
             var registraionResponse = await _client.PostAsJsonAsync(ApiRoutes.Identity.Register, newUser);
+
+            if (!registraionResponse.IsSuccessStatusCode)
+            {
+                await _client.PostAsJsonAsync(ApiRoutes.Identity.Login, newUser);
+            }
             var registraionResponseContent = await registraionResponse.Content.ReadFromJsonAsync<AuthSuccessResponse>();
             return registraionResponseContent.Token;
         }

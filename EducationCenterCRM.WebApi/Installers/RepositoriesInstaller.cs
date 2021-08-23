@@ -18,6 +18,9 @@ namespace EducationCenterCRM.WebApi.Installers
         {
             services.AddScoped<IRepository<Student>, StudentsRepository>();
             services.AddScoped<IRepository<Group>, GroupsRepository>();
+            services.AddScoped<IRepository<Course>, CoursesRepository>();
+            services.AddScoped<IRepository<Topic>, TopicsRepository>();
+            services.AddScoped<IRepository<Teacher>, TeachersRepository>();
         }
     }
 }

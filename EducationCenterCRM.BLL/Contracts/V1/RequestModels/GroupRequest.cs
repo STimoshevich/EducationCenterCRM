@@ -14,7 +14,6 @@ namespace EducationCenterCRM.BLL.Contracts.V1.RequestModels
 {
     public class GroupRequest
     {
-        [Required] 
         public string Title { get; set; }
         public DateTime StartDate { get; set; }
         public GroupStatus Status { get; set; }

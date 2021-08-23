@@ -1,5 +1,4 @@
-﻿using EducationCenterCRM.BLL.Contracts;
-using EducationCenterCRM.BLL.Contracts.V1;
+﻿using EducationCenterCRM.BLL.Contracts.V1;
 using EducationCenterCRM.BLL.Options;
 using EducationCenterCRM.BLL.Services.Interfaces;
 using EducationCenterCRM.DAL.Context;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -24,11 +24,12 @@ namespace EducationCenterCRM.BLL.Services
         private readonly EducationCenterDatabase dataContext;
         private readonly IdentitySettings identitySettings;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly SignInManager<IdentityUser> signInManager;
 
         public IdentityService
             (UserManager<IdentityUser> userManager, JwtSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters, EducationCenterDatabase dataContext,
-            IdentitySettings identitySettings, RoleManager<IdentityRole> roleManager)
+            IdentitySettings identitySettings, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
             this.jwtSettings = jwtSettings;
@@ -36,6 +37,7 @@ namespace EducationCenterCRM.BLL.Services
             this.dataContext = dataContext;
             this.identitySettings = identitySettings;
             this.roleManager = roleManager;
+            this.signInManager = signInManager;
         }
 
         public async Task<AuthentificationResult> LoginAsync(string email, string password)
@@ -57,7 +59,52 @@ namespace EducationCenterCRM.BLL.Services
                     Errors = new[] { "user  or password is wrong" }
                 };
 
+            await CompareAndSetRolesByAppSettings(user);
+
+
             return await GenerateAuthentificationResultForUserAsync(user);
+        }
+
+        public async Task<AuthentificationResult> RegisterAsync(string email, string password)
+        {
+            var existingUser = await userManager.FindByEmailAsync(email);
+            if (existingUser is not null)
+            {
+                return new AuthentificationResult()
+                {
+                    Success = false,
+                    Errors = new[] { "user with this  email already exist" }
+                };
+            }
+
+            var newUserId = Guid.NewGuid();
+
+            var newUser = new IdentityUser
+            {
+                Id = newUserId.ToString(),
+                Email = email,
+                UserName = email
+            };
+
+
+
+            var createdUser = await userManager.CreateAsync(newUser, password);
+
+           
+
+            if (createdUser.Succeeded)
+            {
+                await CompareAndSetRolesByAppSettings(newUser);
+            }
+
+
+            if (!createdUser.Succeeded)
+                return new AuthentificationResult()
+                {
+                    Errors = createdUser.Errors.Select(x => x.Description)
+                };
+
+            return await GenerateAuthentificationResultForUserAsync(newUser);
         }
 
         public async Task<AuthentificationResult> RefreshTokenAsync(string token, string refreshToken)
@@ -72,8 +119,6 @@ namespace EducationCenterCRM.BLL.Services
             }
 
             var expiryDateUnix = long.Parse(claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
-
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
 
@@ -89,6 +134,7 @@ namespace EducationCenterCRM.BLL.Services
             var jti = claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
             var storedRefreshToken = dataContext.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+
 
             if (storedRefreshToken is null)
             {
@@ -132,10 +178,54 @@ namespace EducationCenterCRM.BLL.Services
             dataContext.RefreshTokens.Update(storedRefreshToken);
             await dataContext.SaveChangesAsync();
 
+
             var user = await userManager.FindByIdAsync(claimsPrincipal.Claims.Single(x => x.Type == "id").Value);
+
+            await CompareAndSetRolesByAppSettings(user);
+
             return await GenerateAuthentificationResultForUserAsync(user);
 
 
+        }
+
+        public async Task LogoutAsync()
+        {
+            await signInManager.SignOutAsync();
+        }
+
+        private async Task CompareAndSetRolesByAppSettings(IdentityUser user)
+        {
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            if (!userRoles.Any())
+               await userManager.AddToRoleAsync(user, ApplicationRoles.User);
+
+            List<string> adminEmails = identitySettings.Get().AdminEmails;
+            List<string> managerEmails = identitySettings.Get().ManagerEmails;
+
+            await CompareAndAddRolesAsync(adminEmails, ApplicationRoles.Admin);
+            await CompareAndRemoveRolesAsync(adminEmails,ApplicationRoles.Admin);
+
+
+            await CompareAndAddRolesAsync(managerEmails, ApplicationRoles.Manager);
+            await CompareAndRemoveRolesAsync(managerEmails,ApplicationRoles.Manager);
+
+
+            async Task CompareAndRemoveRolesAsync(List<string> appSettingsIdentityEmails, string role)
+            {
+                if (userRoles.FirstOrDefault(x => x == role) is not null
+               && !appSettingsIdentityEmails.Contains(user.Email))
+                    await userManager.RemoveFromRoleAsync(user, role);
+            }
+         
+
+            async Task CompareAndAddRolesAsync(List<string> appSettingsIdentityEmails, string role)
+            {
+                if (appSettingsIdentityEmails.Contains(user.Email)
+                 && userRoles.FirstOrDefault(x => x == role) is null)
+                    await userManager.AddToRoleAsync(user, role);
+
+            }
         }
 
         private ClaimsPrincipal GetPrincipalFromToken(string token)
@@ -164,54 +254,6 @@ namespace EducationCenterCRM.BLL.Services
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task<AuthentificationResult> RegisterAsync(string email, string password)
-        {
-            var existingUser = await userManager.FindByEmailAsync(email);
-            if (existingUser is not null)
-            {
-                return new AuthentificationResult()
-                {
-                    Success = false,
-                    Errors = new[] { "user with this  email already exist" }
-                };
-            }
-
-            var newUserId = Guid.NewGuid();
-
-            var newUser = new IdentityUser
-            {
-                Id = newUserId.ToString(),
-                Email = email,
-                UserName = email
-            };
-
-            var createdUser = await userManager.CreateAsync(newUser, password);
-
-            if (createdUser.Succeeded)
-            {
-
-                if (identitySettings.AdminEmails.Contains(newUser.Email))
-                {
-                    var res = await userManager.AddToRoleAsync(newUser, ApplicationRolles.Admin);
-                }
-                if (identitySettings.ManagerEmails.Contains(newUser.Email))
-                    await userManager.AddToRoleAsync(newUser, ApplicationRolles.Manager);
-            }
-
-
-
-
-
-
-            if (!createdUser.Succeeded)
-                return new AuthentificationResult()
-                {
-                    Errors = createdUser.Errors.Select(x => x.Description)
-                };
-
-            return await GenerateAuthentificationResultForUserAsync(newUser);
-        }
-
         private async Task<AuthentificationResult> GenerateAuthentificationResultForUserAsync(IdentityUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -227,6 +269,7 @@ namespace EducationCenterCRM.BLL.Services
 
             var userClaims = await userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
+
             var userRoles = await userManager.GetRolesAsync(user);
 
             foreach (var role in userRoles)
@@ -261,5 +304,7 @@ namespace EducationCenterCRM.BLL.Services
                 RefreshToken = resfreshToken.Token
             };
         }
+
+       
     }
 }

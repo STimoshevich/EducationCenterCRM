@@ -11,6 +11,6 @@ namespace EducationCenterCRM.Services.Interfaces.BLL
         Task<bool> AddNewAsync(GroupRequest groupRequest);
         Task<bool> DeleteByIdAsync(int id);
         Task<GroupResponse> GetByIdAsync(int id);
-        Task<bool> UpdateAsync(int id,GroupRequest groupRequest);
+        Task<bool> UpdateAsync(int id, GroupRequest groupRequest);
     }
 }

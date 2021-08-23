@@ -1,46 +1,45 @@
-﻿using EducationCenterCRM.BLL.Contracts.V1;
-using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
-using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
-using EducationCenterCRM.BLL.Services.Interfaces;
-using EducationCenterCRM.DAL.Entities;
-using EducationCenterCRM.Services.Interfaces.BLL;
+﻿using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+using EducationCenterCRM.BLL.Contracts.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using EducationCenterCRM.BLL.Services.Interfaces;
+using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
+using EducationCenterCRM.DAL.Entities;
 
-namespace EducationCenterCRM.BLL.Controllers.V1
+namespace EducationCenterCRM.WebApi.Controllers.V1
 {
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class GroupsController : Controller
+    public class CoursesController : Controller
     {
-        private readonly IGroupService groupService;
+        private readonly ICourseService courseService;
 
-            
-        public GroupsController(IGroupService groupService)
+
+        public CoursesController(ICourseService courseService)
         {
-            this.groupService = groupService;
+            this.courseService = courseService;
         }
 
-      
-        [HttpGet(ApiRoutes.Groups.GetAll)]
+
+        [HttpGet(ApiRoutes.Courses.GetAll)]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await groupService.GetAllAsync());
+            return Ok(await courseService.GetAllAsync());
         }
 
         [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
-        [HttpGet(ApiRoutes.Groups.Get)]
+        [HttpGet(ApiRoutes.Courses.Get)]
         public async Task<IActionResult> GetById(int id)
         {
-   
-            
+
+
             try
             {
-                var result = await groupService.GetByIdAsync(id);
+                var result = await courseService.GetByIdAsync(id);
                 return result is not null ? Ok(result) : NotFound();
             }
             catch (Exception ex)
@@ -51,16 +50,16 @@ namespace EducationCenterCRM.BLL.Controllers.V1
 
                 return BadRequest();
             }
-           
+
         }
 
         [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
-        [HttpDelete(ApiRoutes.Groups.Delete)]
+        [HttpDelete(ApiRoutes.Courses.Delete)]
         public async Task<IActionResult> DeleteById([FromQuery] int id)
         {
             try
             {
-                var deleted = await groupService.DeleteByIdAsync(id);
+                var deleted = await courseService.DeleteByIdAsync(id);
                 return deleted ? Ok() : NotFound();
             }
             catch (Exception ex)
@@ -72,17 +71,17 @@ namespace EducationCenterCRM.BLL.Controllers.V1
                 return BadRequest();
             }
 
-          
+
         }
 
         [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
-        [HttpPost(ApiRoutes.Groups.Create)]
-        public async Task<IActionResult> CreateNew([FromBody]GroupRequest groupRequest)
+        [HttpPost(ApiRoutes.Courses.Create)]
+        public async Task<IActionResult> CreateNew([FromBody] CourseRequest courseRequest)
         {
             try
             {
-                var created = await groupService.AddNewAsync(groupRequest);
-                return created ? Ok() : BadRequest(new { error = "Unable to create group" });
+                var created = await courseService.AddNewAsync(courseRequest);
+                return created ? Ok() : BadRequest(new { error = "Unable to create course" });
             }
             catch (Exception ex)
             {
@@ -92,15 +91,16 @@ namespace EducationCenterCRM.BLL.Controllers.V1
 
                 return BadRequest();
             }
-           
+
         }
         [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
-        [HttpPut(ApiRoutes.Groups.Update)]
-        public async Task<IActionResult> Update([FromQuery] int Id,[FromBody] GroupRequest groupRequest)
+        [HttpPut(ApiRoutes.Courses.Update)]
+        public async Task<IActionResult> Update([FromQuery] int Id, [FromBody] CourseRequest courseRequest)
         {
+            var chek = ModelState;
             try
             {
-                var updated = await groupService.UpdateAsync(Id, groupRequest);
+                var updated = await courseService.UpdateAsync(Id, courseRequest);
                 return updated ? Ok() : NotFound();
             }
             catch (Exception ex)
@@ -110,7 +110,7 @@ namespace EducationCenterCRM.BLL.Controllers.V1
 
                 return BadRequest();
             }
-           
+
         }
     }
 }

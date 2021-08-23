@@ -1,4 +1,4 @@
-﻿using EducationCenterCRM.BLL.Contracts;
+﻿using EducationCenterCRM.BLL.Contracts.V1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +12,6 @@ namespace EducationCenterCRM.BLL.Services.Interfaces
         Task<AuthentificationResult> RegisterAsync(string email, string password);
         Task<AuthentificationResult> LoginAsync(string email, string password);
         Task<AuthentificationResult> RefreshTokenAsync(string token, string refreshToken);
+        Task LogoutAsync();
     }
 }

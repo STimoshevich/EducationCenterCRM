@@ -24,8 +24,8 @@ namespace EducationCenterCRM.Services.BLL
 
         public async Task<List<StudentResponse>> GetAllAsync()
         {
-            var allGroups = await studentRepository.GetAllAsync();
-            return mapper.Map<List<StudentResponse>>(allGroups);
+            var allStudents = await studentRepository.GetAllAsync();
+            return mapper.Map<List<StudentResponse>>(allStudents);
         }
 
         public async Task<bool> AddNewAsync(StudentRequest studentRequest)

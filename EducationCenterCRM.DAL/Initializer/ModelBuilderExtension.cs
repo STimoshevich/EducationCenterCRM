@@ -107,7 +107,59 @@ namespace EducationCenterCRM.DAL.Initializer
                 Type = Enums.StudentType.Mix,
                 GroupId = group_3.Id
             };
+            var topic1 = new Topic()
+            {
+                Id = 1,
+                Title = ".Net",
+                Description = ".Net (ASP.NET, Unity)"
+            };
+            var topic2 = new Topic()
+            {
+                Id = 2,
+                Title = "Java",
+                Description = "Full-stack, JS, Spring"
+            };
 
+
+
+            var course1 = new Course()
+            {
+                Id = 10,
+                Title = "Introduction to C#",
+                Description = "Introduction to C#",
+                Program = "1. Getting Started",
+                TopicId = 1
+            };
+
+            var course2 = new Course()
+            {
+                Id = 11,
+                Title = "Introduction to Java",
+                Description = "Introduction to Java",
+                Program = "1. Getting Started",
+                TopicId = 2
+            };
+
+            var course3 = new Course()
+            {
+                Id = 12,
+                Title = "ASP.NET",
+                Description = "Web with ASP.NET",
+                Program = "1. Controllers and MVC",
+                TopicId = 1
+            };
+
+            var course4 = new Course()
+            {
+                Id = 13,
+                Title = "Unity",
+                Description = "Unity Game Development",
+                Program = "1. What is Unity",
+                TopicId = 1
+            };
+
+            modelBuilder.Entity<Course>().HasData(course1, course2, course3, course4);
+            modelBuilder.Entity<Topic>().HasData(topic1, topic2);
             modelBuilder.Entity<Student>().HasData(student_1, student_2, student_3, student_4, student_5);
             modelBuilder.Entity<Teacher>().HasData(teacher_1, teacher_2, teacher_3);
             modelBuilder.Entity<Group>().HasData(group_1, group_2, group_3, group_4);

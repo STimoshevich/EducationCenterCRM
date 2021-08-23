@@ -12,9 +12,11 @@ namespace EducationCenterCRM.DAL.Context
     public class EducationCenterDatabase : IdentityDbContext
     {
 
-        public DbSet<Student> students { get; set; }
-        public DbSet<Group> groups { get; set; }
-        public DbSet<Teacher> teachers { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Topic> Topics { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
@@ -25,8 +27,9 @@ namespace EducationCenterCRM.DAL.Context
 
         public EducationCenterDatabase(DbContextOptions options) : base(options)
         {
-
-        
+            //TODO: delete this
+            Console.WriteLine($"*************************** {options.ContextType.Name} *********************");
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
           
         }

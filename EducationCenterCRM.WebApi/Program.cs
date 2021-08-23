@@ -24,17 +24,23 @@ namespace EducationCenterCRM.BLL
                     .ServiceProvider
                     .GetService<RoleManager<IdentityRole>>();
 
-                if(!await rolemanager.RoleExistsAsync(ApplicationRolles.Admin))
+
+                if(!await rolemanager.RoleExistsAsync(ApplicationRoles.Admin))
                 {
-                    var admin = new IdentityRole(ApplicationRolles.Admin);
+                    var admin = new IdentityRole(ApplicationRoles.Admin);
                     await rolemanager.CreateAsync(admin);
                 }
-                if (!await rolemanager.RoleExistsAsync(ApplicationRolles.Manager))
+                if (!await rolemanager.RoleExistsAsync(ApplicationRoles.Manager))
                 {
-                    var manager = new IdentityRole(ApplicationRolles.Manager);
+                    var manager = new IdentityRole(ApplicationRoles.Manager);
                     await rolemanager.CreateAsync(manager);
                 }
-               
+                if (!await rolemanager.RoleExistsAsync(ApplicationRoles.User))
+                {
+                    var user = new IdentityRole(ApplicationRoles.User);
+                    await rolemanager.CreateAsync(user);
+                }
+
             }
 
          
