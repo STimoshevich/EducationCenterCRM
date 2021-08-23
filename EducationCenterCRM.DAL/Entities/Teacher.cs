@@ -9,10 +9,10 @@ namespace EducationCenterCRM.DAL.Entities
 {
     public class Teacher : Person
     {
-        
+       
         [Required]
-        [StringLength(100, ErrorMessage = "Lenght should be less than 100")]
         public string Bio { get; set; }
+        [Required]
         public string LinkToProfile { get; set; }
 
     }

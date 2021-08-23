@@ -1,4 +1,4 @@
-﻿using EducationCenterCRM.BLL.Contracts;
+﻿using EducationCenterCRM.BLL.Contracts.V1;
 using System;
 using System.Collections.Generic;
 using System.Linq;

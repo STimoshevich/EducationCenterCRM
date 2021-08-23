@@ -24,6 +24,7 @@ namespace EducationCenterCRM.BLL
                     .ServiceProvider
                     .GetService<RoleManager<IdentityRole>>();
 
+
                 if(!await rolemanager.RoleExistsAsync(ApplicationRolles.Admin))
                 {
                     var admin = new IdentityRole(ApplicationRolles.Admin);

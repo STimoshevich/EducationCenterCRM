@@ -41,7 +41,7 @@ namespace EducationCenterCRM.Services.BLL
             return added > 0 ? true : false;
         }
 
-        public async Task<bool> UpdateAsync(int id,GroupRequest groupRequest)
+        public async Task<bool> UpdateAsync(int id, GroupRequest groupRequest)
         {
             var updated = 0;
             if (groupRequest is not null)
@@ -59,7 +59,7 @@ namespace EducationCenterCRM.Services.BLL
             return deleted > 0 ? true: false;
         }
         public async Task<GroupResponse> GetByIdAsync(int id)
-{
+        {
             var group = await groupRepository.GetByPredicateOrDefaulAsync(predicate: x => x.Id == id);
             return mapper.Map<GroupResponse>(group);
         }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EducationCenterCRM.BLL.Contracts.Validators
+namespace EducationCenterCRM.BLL.Contracts.V1.Validators
 {
     public class GroupRequestValidator : AbstractValidator<GroupRequest>
     {
@@ -15,6 +15,17 @@ namespace EducationCenterCRM.BLL.Contracts.Validators
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .NotNull();
+
+            RuleFor(x => x.StartDate)
+                .NotEmpty()
+                .GreaterThan(DateTime.Now - TimeSpan.FromDays(150));
+
+            RuleFor(x => x.Status)
+                .IsInEnum();
+
+            RuleFor(x => x.TeacherId)
+                .NotNull()
+                .GreaterThan(0);
         }
     }
 }

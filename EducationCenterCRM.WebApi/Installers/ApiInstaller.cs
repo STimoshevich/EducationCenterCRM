@@ -1,10 +1,13 @@
-﻿using EducationCenterCRM.BLL.Options;
+﻿using EducationCenterCRM.BLL.Contracts.V1.Validators;
+using EducationCenterCRM.BLL.Options;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Linq;
+using Serilog;
 using System;
 using System.IO;
 using System.Reflection;
@@ -17,16 +20,19 @@ namespace EducationCenterCRM.BLL.Installers
         public void InstallServiecs(IConfiguration configuration, IServiceCollection services)
         {
             services.AddControllers()
-                .AddFluentValidation(config=> config.RegisterValidatorsFromAssemblyContaining<Startup>());
+                .AddFluentValidation(config=> config.RegisterValidatorsFromAssemblyContaining<GroupRequestValidator>());
 
-            var identitySettings = new IdentitySettings();
-            configuration.Bind(nameof(identitySettings), identitySettings);
-            services.AddSingleton(identitySettings);
-            
+            Log.Logger = new LoggerConfiguration()
+                     .WriteTo.Console()
+                        .CreateLogger();
 
+
+
+            services.AddScoped<IdentitySettings>();
 
             var jwtSettings = new JwtSettings();
-            configuration.Bind(nameof(jwtSettings), jwtSettings);
+            configuration.Bind(nameof(JwtSettings), jwtSettings);
+
             services.AddSingleton(jwtSettings);
 
             var tokenValidationParameters = new TokenValidationParameters()
@@ -52,7 +58,6 @@ namespace EducationCenterCRM.BLL.Installers
                 jwtOptions.SaveToken = true;
                 jwtOptions.TokenValidationParameters = tokenValidationParameters;
             });
-
 
 
             services.AddSwaggerGen(c =>

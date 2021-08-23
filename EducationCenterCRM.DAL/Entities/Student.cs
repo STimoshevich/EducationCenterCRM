@@ -8,7 +8,6 @@ namespace EducationCenterCRM.DAL.Entities
     {
         [Required]
         public DateTime StartDate { get; set; }
-
         [Required]
         public StudentType Type { get; set; }
 

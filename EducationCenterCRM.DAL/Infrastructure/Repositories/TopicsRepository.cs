@@ -9,13 +9,10 @@ using System.Threading.Tasks;
 
 namespace EducationCenterCRM.DAL.Infrastructure.Repositories
 {
-    public class TeachersRepository : AbstractRepository<Teacher>
+    public class TopicsRepository : AbstractRepository<Topic>
     {
-        public TeachersRepository(EducationCenterDatabase context) : base(context)
+        public TopicsRepository(EducationCenterDatabase context) : base(context)
         {
         }
-
-
-      
     }
 }

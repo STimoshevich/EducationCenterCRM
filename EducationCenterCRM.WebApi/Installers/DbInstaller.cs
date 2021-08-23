@@ -15,9 +15,9 @@ namespace EducationCenterCRM.BLL.Installers
     {
         public void InstallServiecs(IConfiguration configuration, IServiceCollection services)
         {
-          //  services.AddDbContext<EducationCenterDatabase>(options => options.UseInMemoryDatabase("tmp_database"));
-          services.AddDbContext<EducationCenterDatabase>(options=>
-            options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EducationCenter;Trusted_Connection=True;"));
+            services.AddDbContext<EducationCenterDatabase>(options => options.UseInMemoryDatabase("tmp_database"));
+          //services.AddDbContext<EducationCenterDatabase>(options=>
+          //  options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EducationCenter;Trusted_Connection=True;"));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<EducationCenterDatabase>();
