@@ -54,6 +54,7 @@ namespace EducationCenterCRM.BLL.Contracts.V1
             public const string Register = Base + "/registration";
             public const string Login = Base + "/login";
             public const string Refresh = Base + "/refreshToken";
+            public const string Logout = Base + "/logout";
         }
 
 

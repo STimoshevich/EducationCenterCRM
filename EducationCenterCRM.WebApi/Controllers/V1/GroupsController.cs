@@ -32,7 +32,7 @@ namespace EducationCenterCRM.BLL.Controllers.V1
             return Ok(await groupService.GetAllAsync());
         }
 
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpGet(ApiRoutes.Groups.Get)]
         public async Task<IActionResult> GetById(int id)
         {
@@ -54,7 +54,7 @@ namespace EducationCenterCRM.BLL.Controllers.V1
            
         }
 
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpDelete(ApiRoutes.Groups.Delete)]
         public async Task<IActionResult> DeleteById([FromQuery] int id)
         {
@@ -75,7 +75,7 @@ namespace EducationCenterCRM.BLL.Controllers.V1
           
         }
 
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpPost(ApiRoutes.Groups.Create)]
         public async Task<IActionResult> CreateNew([FromBody]GroupRequest groupRequest)
         {
@@ -94,7 +94,7 @@ namespace EducationCenterCRM.BLL.Controllers.V1
             }
            
         }
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpPut(ApiRoutes.Groups.Update)]
         public async Task<IActionResult> Update([FromQuery] int Id,[FromBody] GroupRequest groupRequest)
         {

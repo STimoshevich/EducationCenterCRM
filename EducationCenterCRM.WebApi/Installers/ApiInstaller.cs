@@ -19,6 +19,9 @@ namespace EducationCenterCRM.BLL.Installers
     {
         public void InstallServiecs(IConfiguration configuration, IServiceCollection services)
         {
+            //TODO: CORS
+            services.AddCors(); // добавляем сервисы CORS
+
             services.AddControllers()
                 .AddFluentValidation(config=> config.RegisterValidatorsFromAssemblyContaining<GroupRequestValidator>());
 

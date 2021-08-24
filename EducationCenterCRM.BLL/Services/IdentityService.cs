@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -23,11 +24,12 @@ namespace EducationCenterCRM.BLL.Services
         private readonly EducationCenterDatabase dataContext;
         private readonly IdentitySettings identitySettings;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly SignInManager<IdentityUser> signInManager;
 
         public IdentityService
             (UserManager<IdentityUser> userManager, JwtSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters, EducationCenterDatabase dataContext,
-            IdentitySettings identitySettings, RoleManager<IdentityRole> roleManager)
+            IdentitySettings identitySettings, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
             this.jwtSettings = jwtSettings;
@@ -35,6 +37,7 @@ namespace EducationCenterCRM.BLL.Services
             this.dataContext = dataContext;
             this.identitySettings = identitySettings;
             this.roleManager = roleManager;
+            this.signInManager = signInManager;
         }
 
         public async Task<AuthentificationResult> LoginAsync(string email, string password)
@@ -93,10 +96,6 @@ namespace EducationCenterCRM.BLL.Services
             {
                 await CompareAndSetRolesByAppSettings(newUser);
             }
-
-
-
-
 
 
             if (!createdUser.Succeeded)
@@ -189,19 +188,27 @@ namespace EducationCenterCRM.BLL.Services
 
         }
 
+        public async Task LogoutAsync()
+        {
+            await signInManager.SignOutAsync();
+        }
+
         private async Task CompareAndSetRolesByAppSettings(IdentityUser user)
         {
             var userRoles = await userManager.GetRolesAsync(user);
 
-            List<string> adminEmails = identitySettings.Get().AdminsEmails;
-            List<string> managerEmails = identitySettings.Get().ManagersEmails;
+            if (!userRoles.Any())
+               await userManager.AddToRoleAsync(user, ApplicationRoles.User);
 
-            await CompareAndAddRolesAsync(adminEmails, ApplicationRolles.Admin);
-            await CompareAndRemoveRolesAsync(adminEmails,ApplicationRolles.Admin);
+            List<string> adminEmails = identitySettings.Get().AdminEmails;
+            List<string> managerEmails = identitySettings.Get().ManagerEmails;
+
+            await CompareAndAddRolesAsync(adminEmails, ApplicationRoles.Admin);
+            await CompareAndRemoveRolesAsync(adminEmails,ApplicationRoles.Admin);
 
 
-            await CompareAndAddRolesAsync(managerEmails, ApplicationRolles.Manager);
-            await CompareAndRemoveRolesAsync(managerEmails,ApplicationRolles.Manager);
+            await CompareAndAddRolesAsync(managerEmails, ApplicationRoles.Manager);
+            await CompareAndRemoveRolesAsync(managerEmails,ApplicationRoles.Manager);
 
 
             async Task CompareAndRemoveRolesAsync(List<string> appSettingsIdentityEmails, string role)

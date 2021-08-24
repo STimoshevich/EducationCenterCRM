@@ -12,5 +12,6 @@ namespace EducationCenterCRM.BLL.Services.Interfaces
         Task<AuthentificationResult> RegisterAsync(string email, string password);
         Task<AuthentificationResult> LoginAsync(string email, string password);
         Task<AuthentificationResult> RefreshTokenAsync(string token, string refreshToken);
+        Task LogoutAsync();
     }
 }
