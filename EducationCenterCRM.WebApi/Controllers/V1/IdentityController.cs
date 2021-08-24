@@ -137,5 +137,14 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
 
            
         }
+
+        [HttpPost(ApiRoutes.Identity.Refresh)]
+        public async Task<IActionResult> Logout()
+        {
+            identityService.LogoutAsync();
+            return Ok();
+
+
+        }
     }
 }

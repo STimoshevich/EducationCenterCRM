@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace EducationCenterCRM.BLL.Contracts.V1
 {
-    public static class ApplicationRolles
+    public static class ApplicationRoles
     {
         public   const  string Admin = "Admin";
+        public const string User = "User";
         public  const string Manager = "Manager";
     }
 }

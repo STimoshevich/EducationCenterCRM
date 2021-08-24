@@ -35,7 +35,7 @@ namespace EducationCenterCRM.WebApi.IntegrationTests
         {
             //Arrange 
             await AuthentificateAsync();
-            var newGroup = new TacherRequest()
+            var newGroup = new GroupRequest()
             {
                 Title = "title",
                 StartDate = DateTime.Now,
@@ -61,7 +61,7 @@ namespace EducationCenterCRM.WebApi.IntegrationTests
         {
             //Arrange 
             await AuthentificateAsync();
-            var newGroup = new TacherRequest()
+            var newGroup = new GroupRequest()
             {
                 Title = null,
                 StartDate = DateTime.Now,

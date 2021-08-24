@@ -32,8 +32,8 @@ namespace EducationCenterCRM.BLL.Options
         public class IdentitySettingsValues
         {
            
-            public List<string> AdminsEmails { get; set; } = new List<string>();
-            public List<string> ManagersEmails { get; set; } = new List<string>();
+            public List<string> AdminEmails { get; set; } = new List<string>();
+            public List<string> ManagerEmails { get; set; } = new List<string>();
         }
     }
 

@@ -27,7 +27,8 @@ namespace EducationCenterCRM.DAL.Context
 
         public EducationCenterDatabase(DbContextOptions options) : base(options)
         {
-
+            //TODO: delete this
+            Console.WriteLine($"*************************** {options.ContextType.Name} *********************");
             //Database.EnsureDeleted();
             Database.EnsureCreated();
           

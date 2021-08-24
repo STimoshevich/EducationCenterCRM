@@ -35,6 +35,9 @@ namespace EducationCenterCRM.BLL
 
             app.UseRouting();
 
+            //TODO: SORS
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
             app.UseAuthentication();
             app.UseAuthorization();
         

@@ -31,7 +31,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
             return Ok(await courseService.GetAllAsync());
         }
 
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpGet(ApiRoutes.Courses.Get)]
         public async Task<IActionResult> GetById(int id)
         {
@@ -53,7 +53,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
 
         }
 
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpDelete(ApiRoutes.Courses.Delete)]
         public async Task<IActionResult> DeleteById([FromQuery] int id)
         {
@@ -74,7 +74,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
 
         }
 
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpPost(ApiRoutes.Courses.Create)]
         public async Task<IActionResult> CreateNew([FromBody] CourseRequest courseRequest)
         {
@@ -93,7 +93,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
             }
 
         }
-        [Authorize(Roles = ApplicationRolles.Admin + "," + ApplicationRolles.Manager)]
+        [Authorize(Roles = ApplicationRoles.Admin + "," + ApplicationRoles.Manager)]
         [HttpPut(ApiRoutes.Courses.Update)]
         public async Task<IActionResult> Update([FromQuery] int Id, [FromBody] CourseRequest courseRequest)
         {
