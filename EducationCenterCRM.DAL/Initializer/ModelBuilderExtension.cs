@@ -128,7 +128,8 @@ namespace EducationCenterCRM.DAL.Initializer
                 Title = "Introduction to C#",
                 Description = "Introduction to C#",
                 Program = "1. Getting Started",
-                TopicId = 1
+                TopicId = 1,
+                ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnpoO8C2w4eMbJ1NaPLaJgrwC7smBhuwSSRA&usqp=CAU"
             };
 
             var course2 = new Course()
@@ -137,7 +138,9 @@ namespace EducationCenterCRM.DAL.Initializer
                 Title = "Introduction to Java",
                 Description = "Introduction to Java",
                 Program = "1. Getting Started",
-                TopicId = 2
+                TopicId = 2,
+                ImageUrl = "https://www.osp.ru/FileStorage/DOCUMENTS_ILLUSTRATIONS/13230112/original.jpg"
+
             };
 
             var course3 = new Course()
@@ -146,7 +149,9 @@ namespace EducationCenterCRM.DAL.Initializer
                 Title = "ASP.NET",
                 Description = "Web with ASP.NET",
                 Program = "1. Controllers and MVC",
-                TopicId = 1
+                TopicId = 1,
+                ImageUrl = "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/113201276/original/3adcfe36722f42c0a44f46a81f06064c9988fe3a/do-asp-dot-net-core-mvc-applications.png"
+
             };
 
             var course4 = new Course()
@@ -155,7 +160,9 @@ namespace EducationCenterCRM.DAL.Initializer
                 Title = "Unity",
                 Description = "Unity Game Development",
                 Program = "1. What is Unity",
-                TopicId = 1
+                TopicId = 1,
+                ImageUrl = "https://unity.com/sites/default/files/styles/social_media_sharing_twitter/public/2019-11/unity-logo-600x400%402x.jpg?h=10d202d3&itok=LgYBHKk9"
+
             };
 
             modelBuilder.Entity<Course>().HasData(course1, course2, course3, course4);

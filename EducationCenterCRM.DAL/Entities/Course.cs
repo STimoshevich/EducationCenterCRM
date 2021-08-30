@@ -14,5 +14,6 @@ namespace EducationCenterCRM.DAL.Entities
         public string Program { get; set; }
         public int TopicId { get; set; }
         public Topic Topic { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

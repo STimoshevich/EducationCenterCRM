@@ -10,7 +10,9 @@ namespace EducationCenterCRM.DAL.Infrastructure.Interfaces
 {
     public interface IRepository<T> where T : class 
     {
-        Task<List<T>> GetAllAsync();
+        Task<List<T>> GetAllAsync(
+           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+           bool IsTracking = true);
         Task<int> AddAsync(T new_value);
         Task<int> DeleteAsync(int id);
         Task<int> UpdateAsync(T model);

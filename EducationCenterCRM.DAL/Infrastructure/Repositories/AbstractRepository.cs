@@ -54,9 +54,26 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
         }
 
 
-        public virtual async Task<List<T>> GetAllAsync()
+        //public virtual async Task<List<T>> GetAllAsync()
+        //{
+        //    return await table.AsNoTracking().ToListAsync();
+        //}
+
+        public virtual async Task<List<T>> GetAllAsync(
+          Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+          bool IsTracking = true)
         {
-            return await table.AsNoTracking().ToListAsync();
+            if (include is not null)
+            {
+                return IsTracking
+                    ? await include(table).ToListAsync()
+                    : await include(table).AsNoTracking().ToListAsync();
+            }
+
+            return IsTracking
+                   ? (await table.ToListAsync())
+                   : (await table.AsNoTracking().AsNoTracking().ToListAsync());
+           
         }
 
 
@@ -69,14 +86,14 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
             {
                 if (include is not null)
                 {
-                    return IsTracking ?
-                         (await include(table).FirstOrDefaultAsync(predicate)) :
-                         (await include(table).AsNoTracking().FirstOrDefaultAsync(predicate));
+                    return IsTracking
+                        ? (await include(table).FirstOrDefaultAsync(predicate))
+                        : (await include(table).AsNoTracking().FirstOrDefaultAsync(predicate));
                 }
 
-                return IsTracking ?
-                        (await table.FirstOrDefaultAsync(predicate)) :
-                        (await table.AsNoTracking().FirstOrDefaultAsync(predicate));
+                return IsTracking 
+                       ? (await table.FirstOrDefaultAsync(predicate)) 
+                       : (await table.AsNoTracking().FirstOrDefaultAsync(predicate));
             }
             return null;
         }
