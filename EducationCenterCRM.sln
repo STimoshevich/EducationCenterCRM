@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.WebApi.I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F8D8ED02-94EA-4D2F-BD14-FA824F4B9E09}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.Client", "EducationCenterCRM.Client\EducationCenterCRM.Client.csproj", "{5AA8C640-1305-484E-A0BF-BEB2E01F270E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{5A0443C2-112D-4128-A189-9C33EC7CA23C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A0443C2-112D-4128-A189-9C33EC7CA23C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A0443C2-112D-4128-A189-9C33EC7CA23C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
