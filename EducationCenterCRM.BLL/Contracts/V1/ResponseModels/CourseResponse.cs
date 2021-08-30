@@ -14,5 +14,7 @@ namespace EducationCenterCRM.BLL.Contracts.V1.ResponseModels
         public string Description { get; set; }
         public string Program { get; set; }
         public int TopicId { get; set; }
+        public Topic Topic { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

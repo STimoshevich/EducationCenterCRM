@@ -4,6 +4,7 @@ using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
 using EducationCenterCRM.BLL.Services.Interfaces;
 using EducationCenterCRM.DAL.Entities;
 using EducationCenterCRM.DAL.Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace EducationCenterCRM.BLL.Services
 
         public async Task<List<CourseResponse>> GetAllAsync()
         {
-            var allCourses = await courseRepository.GetAllAsync();
+            var allCourses = await courseRepository.GetAllAsync(include: course=> course.Include(x => x.Topic));
             return mapper.Map<List<CourseResponse>>(allCourses);
         }
 
