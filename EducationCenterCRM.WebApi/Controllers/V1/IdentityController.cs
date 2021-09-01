@@ -138,10 +138,12 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
            
         }
 
+
         [HttpPost(ApiRoutes.Identity.Logout)]
         public async Task<IActionResult> Logout()
         {
             await identityService.LogoutAsync();
+
             return Ok();
 
 
