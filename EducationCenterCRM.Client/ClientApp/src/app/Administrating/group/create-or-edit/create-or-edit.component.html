@@ -1,0 +1,129 @@
+<div class="row" style="margin-left: 5%; margin-top: 4%">
+  <div class="col-4" *ngIf="!isCreate">
+    <H1>Students list:</H1>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" *ngFor="let student of students">
+        {{ student.name }} {{ student.lastname }}
+      </li>
+    </ul>
+  </div>
+  <div class="col-8">
+    <div style="width: 100%">
+      <div class="mb-3" style="width: 5%">
+        <h1 *ngIf="isCreate">Create group</h1>
+        <h1 *ngIf="!isCreate">Edit group</h1>
+      </div>
+      <form [formGroup]="groupForm" *ngIf="groupForm" (ngSubmit)="Submit()">
+        <div style="width: 30%">
+          <div class="mb-3">
+            <label class="form-label">Id</label>
+            <input
+              type="number"
+              class="form-control"
+              readonly
+              formControlName="id"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" formControlName="title" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Start date</label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="startDate"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Capacity</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="studentCapacity"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Course</label>
+            <select
+              (click)="GetAllCourseTitles()"
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="courseId"
+            >
+              <option value="{{ group.courseId }}">
+                {{ group.courseTitle }}
+              </option>
+              <option
+                *ngFor="let course of courseTitlesWithId"
+                value="{{ course.id }}"
+              >
+                {{ course.title }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select
+              (click)="GetAllGroupsStatuses()"
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="status"
+            >
+              <option value="{{ group.status }}">
+                {{ group.status }}
+              </option>
+              <option *ngFor="let status of allStatuses" value="{{ status }}">
+                {{ status }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Studing type</label>
+            <select
+              (click)="GetStydingTypes()"
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="studingType"
+            >
+              <option value="{{ group.studingType }}">
+                {{ group.studingType }}
+              </option>
+              <option
+                *ngFor="let studingType of studingTypes"
+                value="{{ studingType }}"
+              >
+                {{ studingType }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Teacher</label>
+            <select
+              (click)="GetAllTeachersNamesByCourseId()"
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="teacherId"
+            >
+              <option value="{{ group.teacherId }}">
+                {{ group.teacherName }}
+              </option>
+              <option
+                *ngFor="let teacher of teachersNamesWithId"
+                value="{{ teacher.id }}"
+              >
+                {{ teacher.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

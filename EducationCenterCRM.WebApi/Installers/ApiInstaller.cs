@@ -23,7 +23,7 @@ namespace EducationCenterCRM.BLL.Installers
             services.AddCors(); // добавляем сервисы CORS
 
             services.AddControllers()
-                .AddFluentValidation(config=> config.RegisterValidatorsFromAssemblyContaining<GroupRequestValidator>());
+                .AddFluentValidation(config=> config.RegisterValidatorsFromAssemblyContaining<GroupDTOValidator>());
 
             Log.Logger = new LoggerConfiguration()
                      .WriteTo.Console()

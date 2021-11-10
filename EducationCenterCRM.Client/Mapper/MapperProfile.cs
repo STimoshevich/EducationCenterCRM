@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
-using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
+using EducationCenterCRM.BLL.DTO;
 using EducationCenterCRM.DAL.Entities;
-using System.Collections.Generic;
 
 namespace EducationCenterCRM.PresentationLayer.Mapper
 {
@@ -10,21 +8,38 @@ namespace EducationCenterCRM.PresentationLayer.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<Student,StudentRequest>().ReverseMap();
-            CreateMap<Student, StudentResponse>().ReverseMap();
-
-            CreateMap<Group, GroupRequest>().ReverseMap();
-            CreateMap<Group, GroupResponse>().ReverseMap();
-
-            CreateMap<Topic, TopicRequest>().ReverseMap();
-            CreateMap<Topic, TopicResponse>().ReverseMap();
-
-            CreateMap<Course, CourseRequest>().ReverseMap();
-            CreateMap<Course, CourseResponse>().ReverseMap();
 
 
-            CreateMap<Teacher, TeacherRequest>().ReverseMap();
-            CreateMap<Teacher, TeacherResponse>().ReverseMap();
+            CreateMap<Student, StudentDTO>()
+                .ForMember(x => x.Name, opt => opt.MapFrom(x => x.EducationCenterUser.PersonName))
+                .ForMember(x => x.Lastname, opt => opt.MapFrom(x => x.EducationCenterUser.PersonLastName))
+                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.EducationCenterUser.Email))
+                 .ForMember(x => x.Phone, opt => opt.MapFrom(x => x.EducationCenterUser.PhoneNumber));
+            CreateMap<StudentDTO, Student>();
+
+            CreateMap<Group, GroupDTO>()
+                .ForMember(x => x.CourseTitle, opt => opt.MapFrom(x => x.Course.Title))
+                 .ForMember(x => x.TeacherName, opt => opt.MapFrom(x => $"{x.Teacher.EducationCenterUser.PersonName} {x.Teacher.EducationCenterUser.PersonLastName}"));
+            CreateMap<GroupDTO, Group>();
+
+
+            CreateMap<Topic, TopicDTO>().ReverseMap();
+
+            CreateMap<Course, CourseDTO>().ReverseMap();
+
+
+            CreateMap<StudingRequest, StudingRequestDTO>();
+
+            CreateMap<Teacher, TeacherDTO>()
+                .ForMember(x => x.FullName, opt => opt.MapFrom(x => $"{x.EducationCenterUser.PersonName} {x.EducationCenterUser.PersonLastName}"))
+                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.EducationCenterUser.Email))
+                .ForMember(x => x.Phone, opt => opt.MapFrom(x => x.EducationCenterUser.PhoneNumber));
+            CreateMap<TeacherDTO, Teacher>();
+            CreateMap<StudingRequest, StudingRequestDTO>();
+
+            CreateMap<EducationCenterUser, UserDTO>()
+                .ForMember(x => x.FullName, opt => opt.MapFrom(x => $"{x.PersonName} {x.PersonLastName}"));
+
         }
     }
 }

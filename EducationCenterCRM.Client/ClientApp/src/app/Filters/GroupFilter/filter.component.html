@@ -1,0 +1,31 @@
+<div class="mb-3" style="margin-top: 10%">
+  <h5>Status:</h5>
+  <select
+    [(ngModel)]="groupFilter.groupStatus"
+    (change)="FieldChanged()"
+    (click)="GetAllGroupsStatuses()"
+    class="form-select"
+    aria-label="Default select example"
+  >
+    <option></option>
+    <option *ngFor="let statusName of allStatuses" value="{{ statusName }}">
+      {{ statusName }}
+    </option>
+  </select>
+  <h5>Course:</h5>
+  <select
+    [(ngModel)]="groupFilter.courseTitle"
+    (change)="FieldChanged()"
+    (click)="GetAllCourseTitles()"
+    class="form-select"
+    aria-label="Default select example"
+  >
+    <option></option>
+    <option
+      *ngFor="let titleWithId of courseTitlesWithId"
+      value="{{ titleWithId.title }}"
+    >
+      {{ titleWithId.title }}
+    </option>
+  </select>
+</div>

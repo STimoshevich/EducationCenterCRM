@@ -14,5 +14,11 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
         public TopicsRepository(EducationCenterDatabase context) : base(context)
         {
         }
+
+
+        public async Task<IEnumerable<string>> GetAllTitles()
+        {
+            return await table.Select(x => x.Title)?.ToListAsync();
+        }
     }
 }

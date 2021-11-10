@@ -1,0 +1,73 @@
+<div class="row" style="margin-top: 5%; margin-left: 3%">
+  <div class="col-2" style="margin-top: 3%">
+    <h1>Teacher info:</h1>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <h5>Name:</h5>
+        {{ teacher.fullName }}
+      </li>
+      <li class="list-group-item">
+        <h5>Phone:</h5>
+        {{ teacher.phone }}
+      </li>
+      <li class="list-group-item">
+        <h5>Email:</h5>
+        {{ teacher.email }}
+      </li>
+      <li class="list-group-item">
+        <h5>Link:</h5>
+        {{ teacher.linkToProfile }}
+      </li>
+    </ul>
+  </div>
+  <div class="col-10">
+    <h4>Teacher courses:</h4>
+    <table class="table table-hover" style="width: 90%">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Course</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ course.title }}</td>
+          <td>
+            <button
+              (click)="DeleteCourse(course.id)"
+              type="button"
+              class="btn btn-info btn-sm mx-1"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>All courses:</h4>
+    <div class="input-group mb-3" style="width: 50%">
+      <div class="input-group-prepend">
+        <select
+          (click)="GetAllCoursesTitlesWithId()"
+          class="form-select"
+          aria-label="Default select example"
+          #selected
+        >
+          <option
+            *ngFor="let course of courseTitlesWithId"
+            value="{{ course.id }}"
+          >
+            {{ course.title }}
+          </option>
+        </select>
+        <div class="mb-3 ml-4">
+          <button class="btn btn-primary" (click)="AddCourse()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <button class="btn btn-primary" (click)="Save()">Save changes</button>
+    </div>
+  </div>
+</div>

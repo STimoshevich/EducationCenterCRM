@@ -1,16 +1,8 @@
-﻿using EducationCenterCRM.DAL.Entities;
+﻿using EducationCenterCRM.DAL.Context;
+using EducationCenterCRM.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using EducationCenterCRM.DAL.Context;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Query;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EducationCenterCRM.DAL.Infrastructure.Repositories
 {
@@ -20,6 +12,19 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
         {
         }
 
-        
+        public async Task  AddStudent(int groupId, Student student)
+        {
+          var group = await  table.FirstOrDefaultAsync(x => x.Id == groupId);
+            if (group is not null && student is not null)
+            {
+                group.Students.Add(student);
+                context.SaveChanges();
+            }
+        }
+      
+
     }
+
+
 }
+

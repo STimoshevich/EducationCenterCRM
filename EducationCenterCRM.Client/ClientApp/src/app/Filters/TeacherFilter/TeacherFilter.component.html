@@ -1,0 +1,18 @@
+<div class="mb-3" style="margin-top: 10%">
+  <h5>Course:</h5>
+  <select
+    [(ngModel)]="teacherFilter.courseId"
+    (change)="FieldChanged()"
+    (click)="GetAllCourseTitles()"
+    class="form-select"
+    aria-label="Default select example"
+  >
+    <option></option>
+    <option
+      *ngFor="let titleWithId of courseTitlesWithId"
+      value="{{ titleWithId.id }}"
+    >
+      {{ titleWithId.title }}
+    </option>
+  </select>
+</div>

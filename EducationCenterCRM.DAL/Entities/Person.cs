@@ -5,17 +5,10 @@ namespace EducationCenterCRM.DAL.Entities
 {
     public abstract class Person
     {
-
+        [Required]
         public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
-        public string Lastname { get; set; }
-        [Required]
-        public string Email { get; set; }
-        [Required]
-        public string Phone { get; set; }
-        [Required]
-        public DateTime BirthDate { get; set; }
+        public string EducationCenterUserId { get; set; }
+        public EducationCenterUser EducationCenterUser { get; set; }
+
     }
 }

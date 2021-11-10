@@ -1,54 +1,60 @@
 ﻿using AutoMapper;
-using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
-using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
+using EducationCenterCRM.BLL.DTO;
 using EducationCenterCRM.BLL.Services.Interfaces;
 using EducationCenterCRM.DAL.Entities;
-using EducationCenterCRM.DAL.Infrastructure.Interfaces;
 using EducationCenterCRM.DAL.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EducationCenterCRM.BLL.Services
 {
     public class TopicService : ITopicService
     {
-        private readonly IRepository<Topic> topicRepository;
+        private readonly TopicsRepository topicRepository;
         private readonly IMapper mapper;
 
-        public TopicService(IRepository<Topic> topicRepository, IMapper mapper)
+        public TopicService(TopicsRepository topicRepository, IMapper mapper)
         {
             this.topicRepository = topicRepository;
             this.mapper = mapper;
         }
 
-        public  async Task<bool> UpdateAsync(int id, TopicRequest topicRequest)
+        public async Task<bool> UpdateAsync(int id, TopicDTO topicRequest)
         {
             var updated = 0;
             if (topicRequest is not null)
             {
-                var newTopic = mapper.Map<Topic>(topicRequest);
-                newTopic.Id = id;
-                updated = await topicRepository.UpdateAsync(newTopic);
+                //var newTopic = mapper.Map<Topic>(topicRequest);
+                //newTopic.Id = id;
+                //updated = await topicRepository.UpdateAsync(newTopic);
             }
             return updated > 0 ? true : false;
         }
 
-    
-        public  async Task<TopicResponse> GetByIdAsync(int id)
+
+        public async Task<TopicDTO> GetByIdAsync(int id)
         {
-            var topic = await topicRepository.GetByPredicateOrDefaulAsync
-                (predicate: x => x.Id == id,
-                IsTracking: false);
-            return mapper.Map<TopicResponse>(topic);
+            //var topic = await topicRepository.GetByPredicateOrDefaulAsync
+            //    (predicate: x => x.Id == id,
+            //    IsTracking: false);
+            //return mapper.Map<TopicDTO>(topic);
+            return null;
         }
 
-        public async Task<List<TopicResponse>> GetAllAsync()
-{
+        public async Task<List<TopicDTO>> GetAllAsync()
+        {
             var allTopics = await topicRepository.GetAllAsync();
-            return mapper.Map<List<TopicResponse>>(allTopics);
+            return mapper.Map<List<TopicDTO>>(allTopics);
         }
 
-        public async Task<bool> AddNewAsync(TopicRequest topicRequest)
+        public async Task<IEnumerable<string>> GetAllTitles()
+        {
+            return await topicRepository.GetAllTitles();
+        }
+
+        public async Task<bool> AddNewAsync(TopicDTO topicRequest)
         {
             var added = 0;
             if (topicRequest is not null)

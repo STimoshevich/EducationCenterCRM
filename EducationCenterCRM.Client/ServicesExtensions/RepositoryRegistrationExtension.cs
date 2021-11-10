@@ -1,11 +1,6 @@
 ﻿using EducationCenterCRM.DAL.Entities;
-using EducationCenterCRM.DAL.Infrastructure.Interfaces;
 using EducationCenterCRM.DAL.Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EducationCenterCRM.Client.ServicesExtensions
 {
@@ -13,11 +8,12 @@ namespace EducationCenterCRM.Client.ServicesExtensions
     {
         public static void AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IRepository<Student>, StudentsRepository>();
-            services.AddScoped<IRepository<Group>, GroupsRepository>();
-            services.AddScoped<IRepository<Course>, CoursesRepository>();
-            services.AddScoped<IRepository<Topic>, TopicsRepository>();
-            services.AddScoped<IRepository<Teacher>, TeachersRepository>();
+            services.AddScoped<StudentsRepository>();
+            services.AddScoped<GroupsRepository>();
+            services.AddScoped<CoursesRepository>();
+            services.AddScoped<TopicsRepository>();
+            services.AddScoped<TeachersRepository>();
+            services.AddScoped<StudingRequestRepository>();
         }
     }
 }

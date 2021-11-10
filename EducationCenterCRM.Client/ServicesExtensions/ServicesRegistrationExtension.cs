@@ -2,6 +2,7 @@
 using EducationCenterCRM.BLL.Services.Interfaces;
 using EducationCenterCRM.Services.BLL;
 using EducationCenterCRM.Services.Interfaces.BLL;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,16 @@ namespace EducationCenterCRM.Client.ServicesExtensions
 {
     public static class ServicesRegistrationExtension
     {
-        public static void AddServices (this IServiceCollection services)
+        public static void AddBllServices (this IServiceCollection services)
         {
 
-            //services.AddScoped<IGroupService, GroupService>();
-            //services.AddScoped<IStudentService, StudentService>();
-            //services.AddScoped<IIdentityService, IdentityService>();
-            //services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<ICourseService, CourseService>();
-            //services.AddScoped<ITopicService, TopicService>();
+            services.AddScoped<IStudingRequestService, StudingRequestService>();
+            services.AddScoped<ITopicService, TopicService>();
         }
 
     }

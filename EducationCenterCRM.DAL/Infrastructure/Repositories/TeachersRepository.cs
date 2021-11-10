@@ -15,7 +15,14 @@ namespace EducationCenterCRM.DAL.Infrastructure.Repositories
         {
         }
 
+        public async Task<IEnumerable<Tuple<int, string>>> AllNamesWithId()
+        {
+            return await table
+                .Include(x=>x.EducationCenterUser)
+                .Select(x => new Tuple<int, string>(x.Id, $"{x.EducationCenterUser.UserName} {x.EducationCenterUser.PersonLastName}")).ToListAsync();
+        }
 
-      
+
+
     }
 }

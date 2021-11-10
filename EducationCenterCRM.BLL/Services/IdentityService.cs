@@ -1,9 +1,15 @@
-﻿using EducationCenterCRM.BLL.Contracts.V1;
+﻿using AutoMapper;
+using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+using EducationCenterCRM.BLL.DTO;
 using EducationCenterCRM.BLL.Options;
 using EducationCenterCRM.BLL.Services.Interfaces;
+using EducationCenterCRM.DAL;
 using EducationCenterCRM.DAL.Context;
 using EducationCenterCRM.DAL.Entities;
+using EducationCenterCRM.Services.Interfaces.BLL;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -18,26 +24,46 @@ namespace EducationCenterCRM.BLL.Services
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<EducationCenterUser> userManager;
         private readonly JwtSettings jwtSettings;
+        private readonly IStudentService studentService;
+        private readonly ITeacherService teacherService;
         private readonly TokenValidationParameters tokenValidationParameters;
         private readonly EducationCenterDatabase dataContext;
         private readonly IdentitySettings identitySettings;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly RoleManager<EducationCenterRole> roleManager;
+        private readonly SignInManager<EducationCenterUser> signInManager;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IMapper mapper;
 
         public IdentityService
-            (UserManager<IdentityUser> userManager, JwtSettings jwtSettings,
+            (UserManager<EducationCenterUser> userManager, JwtSettings jwtSettings,
+            IStudentService studentService,
+            ITeacherService teacherService,
             TokenValidationParameters tokenValidationParameters, EducationCenterDatabase dataContext,
-            IdentitySettings identitySettings, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
+            IdentitySettings identitySettings, RoleManager<EducationCenterRole> roleManager, SignInManager<EducationCenterUser> signInManager,
+             IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
             this.userManager = userManager;
             this.jwtSettings = jwtSettings;
+            this.studentService = studentService;
+            this.teacherService = teacherService;
             this.tokenValidationParameters = tokenValidationParameters;
             this.dataContext = dataContext;
             this.identitySettings = identitySettings;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
+            this.httpContextAccessor = httpContextAccessor;
+            this.mapper = mapper;
+        }
+
+
+        public async Task<EducationCenterUser> GetCurrentUserAsync()
+        {
+            var userClaims = httpContextAccessor.HttpContext?.User;
+            var user = await userManager.FindByIdAsync(userClaims.Claims.Single(x => x.Type == "id").Value);
+
+            return user;
         }
 
         public async Task<AuthentificationResult> LoginAsync(string email, string password)
@@ -65,9 +91,9 @@ namespace EducationCenterCRM.BLL.Services
             return await GenerateAuthentificationResultForUserAsync(user);
         }
 
-        public async Task<AuthentificationResult> RegisterAsync(string email, string password)
+        public async Task<AuthentificationResult> RegisterAsync(UserRegistrationRequest registrationRequest)
         {
-            var existingUser = await userManager.FindByEmailAsync(email);
+            var existingUser = await userManager.FindByEmailAsync(registrationRequest.Email);
             if (existingUser is not null)
             {
                 return new AuthentificationResult()
@@ -79,37 +105,42 @@ namespace EducationCenterCRM.BLL.Services
 
             var newUserId = Guid.NewGuid();
 
-            var newUser = new IdentityUser
+
+            var newUser = new EducationCenterUser
             {
                 Id = newUserId.ToString(),
-                Email = email,
-                UserName = email
+                Email = registrationRequest.Email,
+                UserName = registrationRequest.Email,
+                PersonName = registrationRequest.Name,
+                PersonLastName = registrationRequest.LastName,
+                PhoneNumber = registrationRequest.Phone,
             };
 
 
 
-            var createdUser = await userManager.CreateAsync(newUser, password);
+            var createdUser = await userManager.CreateAsync(newUser, registrationRequest.Password);
 
-           
-
-            if (createdUser.Succeeded)
-            {
-                await CompareAndSetRolesByAppSettings(newUser);
-            }
 
 
             if (!createdUser.Succeeded)
+            {
                 return new AuthentificationResult()
                 {
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
+            }
+
+            await CompareAndSetRolesByAppSettings(newUser);
+
+
+            await AddToTableByRole(newUser);
 
             return await GenerateAuthentificationResultForUserAsync(newUser);
         }
 
-        public async Task<AuthentificationResult> RefreshTokenAsync(string token, string refreshToken)
+        public async Task<AuthentificationResult> RefreshTokenAsync(RefreshTokenRequest tokens)
         {
-            var claimsPrincipal = GetPrincipalFromToken(token);
+            var claimsPrincipal = GetPrincipalFromToken(tokens.Token);
             if (claimsPrincipal is null)
             {
                 return new AuthentificationResult()
@@ -133,7 +164,8 @@ namespace EducationCenterCRM.BLL.Services
 
             var jti = claimsPrincipal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            var storedRefreshToken = dataContext.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+            var storedRefreshToken = dataContext.RefreshTokens.SingleOrDefault(x => x.Token == tokens.RefreshToken);
+
 
 
             if (storedRefreshToken is null)
@@ -183,8 +215,62 @@ namespace EducationCenterCRM.BLL.Services
 
             await CompareAndSetRolesByAppSettings(user);
 
+
+
             return await GenerateAuthentificationResultForUserAsync(user);
 
+
+        }
+
+        private async Task AddToTableByRole(EducationCenterUser user)
+        {
+            if (await userManager.IsInRoleAsync(user, ApplicationRoles.Student))
+            {
+                await studentService.AddNewAsync(user.Id);
+            }
+            if (await userManager.IsInRoleAsync(user, ApplicationRoles.Teacher))
+            {
+                await teacherService.AddNewAsync(user.Id);
+            }
+        }
+
+
+        private async Task RemoveFromTableByRole(EducationCenterUser user,List<string> roles)
+        {
+
+            
+
+            if (roles.Contains(ApplicationRoles.Student))
+            {
+                await studentService.DeleteByUserIdAsync(user.Id);
+            }
+            if (roles.Contains(ApplicationRoles.Teacher))
+            {
+                await teacherService.DeleteByUserIdAsync(user.Id);
+            }
+        }
+
+        public async Task ChangeRoles(string newRole, string userId)
+        {
+            if (await roleManager.Roles.FirstOrDefaultAsync(x => x.Name == newRole) is not null)
+            {
+                var user = await userManager.Users.FirstOrDefaultAsync(x=>x.Id == userId);
+                if (!(await userManager.IsInRoleAsync(user, newRole)) && user is not null)
+                {
+                    var roles = await userManager.GetRolesAsync(user);
+
+                    await RemoveFromTableByRole(user,roles.ToList());
+
+                    await userManager.RemoveFromRolesAsync(user,roles);
+                    var result =  await userManager.AddToRoleAsync(user, newRole);
+
+                  
+
+                    await AddToTableByRole(user);
+
+                 
+                }
+            }
 
         }
 
@@ -193,37 +279,44 @@ namespace EducationCenterCRM.BLL.Services
             await signInManager.SignOutAsync();
         }
 
-        private async Task CompareAndSetRolesByAppSettings(IdentityUser user)
+        private async Task CompareAndSetRolesByAppSettings(EducationCenterUser user)
         {
             var userRoles = await userManager.GetRolesAsync(user);
 
-            if (!userRoles.Any())
-               await userManager.AddToRoleAsync(user, ApplicationRoles.User);
+
 
             List<string> adminEmails = identitySettings.Get().AdminEmails;
             List<string> managerEmails = identitySettings.Get().ManagerEmails;
 
-            await CompareAndAddRolesAsync(adminEmails, ApplicationRoles.Admin);
-            await CompareAndRemoveRolesAsync(adminEmails,ApplicationRoles.Admin);
+            await CompareWirhSettingsAndAddRolesAsync(adminEmails, ApplicationRoles.Admin);
+            await CompareWithSettingsAndRemoveRolesAsync(adminEmails, ApplicationRoles.Admin);
 
 
-            await CompareAndAddRolesAsync(managerEmails, ApplicationRoles.Manager);
-            await CompareAndRemoveRolesAsync(managerEmails,ApplicationRoles.Manager);
+            await CompareWirhSettingsAndAddRolesAsync(managerEmails, ApplicationRoles.Manager);
+            await CompareWithSettingsAndRemoveRolesAsync(managerEmails, ApplicationRoles.Manager);
 
 
-            async Task CompareAndRemoveRolesAsync(List<string> appSettingsIdentityEmails, string role)
+
+            if (!(await userManager.GetRolesAsync(user)).Any())
+                await userManager.AddToRoleAsync(user, ApplicationRoles.Student);
+
+
+            async Task CompareWithSettingsAndRemoveRolesAsync(List<string> appSettingsIdentityEmails, string role)
             {
+
                 if (userRoles.FirstOrDefault(x => x == role) is not null
                && !appSettingsIdentityEmails.Contains(user.Email))
                     await userManager.RemoveFromRoleAsync(user, role);
             }
-         
-
-            async Task CompareAndAddRolesAsync(List<string> appSettingsIdentityEmails, string role)
+            async Task CompareWirhSettingsAndAddRolesAsync(List<string> appSettingsIdentityEmails, string role)
             {
                 if (appSettingsIdentityEmails.Contains(user.Email)
                  && userRoles.FirstOrDefault(x => x == role) is null)
+                {
+                    await userManager.RemoveFromRolesAsync(user, await userManager.GetRolesAsync(user));
                     await userManager.AddToRoleAsync(user, role);
+                }
+
 
             }
         }
@@ -254,7 +347,7 @@ namespace EducationCenterCRM.BLL.Services
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task<AuthentificationResult> GenerateAuthentificationResultForUserAsync(IdentityUser user)
+        private async Task<AuthentificationResult> GenerateAuthentificationResultForUserAsync(EducationCenterUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
@@ -264,6 +357,7 @@ namespace EducationCenterCRM.BLL.Services
                  new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                  new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                  new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                  new Claim("id", user.Id)
              };
 
@@ -305,6 +399,36 @@ namespace EducationCenterCRM.BLL.Services
             };
         }
 
-       
+        public async Task<UserListDTO> GetAllAsync()
+        {
+            var res = new UserListDTO();
+           var userInAdminRole = await  userManager.GetUsersInRoleAsync(ApplicationRoles.Admin);
+            var users = await userManager
+                .Users
+                .AsNoTracking()
+                .Where(x=> !userInAdminRole.Contains(x))
+                .Include(x => x.Person)
+                .OrderBy(x=>x.PersonName)
+                .ToListAsync();
+
+            res.users = mapper.Map<List<UserDTO>>(users);
+
+            res.users.ForEach(x => x.Roles = userManager.GetRolesAsync(userManager.Users.FirstOrDefault(y => y.Id == x.Id)).Result.ToList());
+
+            res.usersAmount = await userManager.Users.AsNoTracking().CountAsync();
+
+            return res;
+        }
+
+
+        public async Task<IEnumerable<RoleNameWithId>> GetAllRolesNamesWithIdAsync()
+        {
+            return await roleManager?
+                .Roles
+                .Where(x => x.Name != ApplicationRoles.Admin)
+                .Select(x => new RoleNameWithId { Id = x.Id, Name = x.Name })
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+        }
     }
 }

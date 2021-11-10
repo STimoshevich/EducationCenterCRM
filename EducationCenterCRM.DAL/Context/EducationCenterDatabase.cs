@@ -11,13 +11,16 @@ namespace EducationCenterCRM.DAL.Context
 {
     public class EducationCenterDatabase : IdentityDbContext
     {
-
         public DbSet<Student> Students { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<StudingRequest> StudingRequests { get; set; }
+
+
+     
 
 
 
@@ -27,9 +30,11 @@ namespace EducationCenterCRM.DAL.Context
 
         public EducationCenterDatabase(DbContextOptions options) : base(options)
         {
+
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
-          
+
+            //Database.EnsureCreated();
+
         }
 
        
@@ -37,8 +42,8 @@ namespace EducationCenterCRM.DAL.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging();
-           // optionsBuilder.LogTo(System.Console.WriteLine);
+            //optionsBuilder.EnableSensitiveDataLogging();
+            //optionsBuilder.LogTo(System.Console.WriteLine);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,7 +52,8 @@ namespace EducationCenterCRM.DAL.Context
                 .Entity<Group>()
                 .HasMany<Student>(x => x.Students)
                 .WithOne(x => x.Group)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
+
 
 
             modelBuilder.Seed();

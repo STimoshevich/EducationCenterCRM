@@ -1,0 +1,74 @@
+<h5>Price:</h5>
+<div class="input-group mb-3">
+  <span class="input-group-text">From</span>
+  <input
+    type="number"
+    class="form-control"
+    [(ngModel)]="courseFilter.priceFrom"
+    (keyup)="FieldChanged()"
+    aria-label="Amount (to the nearest dollar)"
+  />
+  <span class="input-group-text">To</span>
+  <input
+    type="number"
+    class="form-control"
+    aria-label="Amount (to the nearest dollar)"
+    [(ngModel)]="courseFilter.priceTo"
+    (keyup)="FieldChanged()"
+  />
+</div>
+
+<h5>Duration weeks:</h5>
+<div class="input-group mb-3">
+  <span class="input-group-text">From</span>
+  <input
+    type="number"
+    class="form-control"
+    aria-label="Amount (to the nearest dollar)"
+    [(ngModel)]="courseFilter.durationWeeksFrom"
+    (keyup)="FieldChanged()"
+  />
+  <span class="input-group-text">To</span>
+  <input
+    type="number"
+    class="form-control"
+    aria-label="Amount (to the nearest dollar)"
+    [(ngModel)]="courseFilter.durationWeeksTo"
+    (keyup)="FieldChanged()"
+  />
+</div>
+<div class="mb-3">
+  <h5>Level:</h5>
+  <select
+    [(ngModel)]="courseFilter.level"
+    (change)="FieldChanged()"
+    class="form-select"
+    aria-label="Default select example"
+  >
+    <option></option>
+    <option *ngFor="let lvlName of courseLvlNames" value="{{ lvlName }}">
+      {{ lvlName }}
+    </option>
+  </select>
+</div>
+
+<h5>Topics:</h5>
+<div class="mb-3">
+  <div
+    *ngFor="let topic of topictitles"
+    style="display: inline-block"
+    class="ml-1 mb-2"
+    (click)="AddTopicToFilter(topic)"
+  >
+    <button
+      type="button"
+      [ngClass]="
+        courseFilter.topicNames?.indexOf(topic) === -1
+          ? 'btn btn-ligt'
+          : 'btn btn-success'
+      "
+    >
+      {{ topic }}
+    </button>
+  </div>
+</div>

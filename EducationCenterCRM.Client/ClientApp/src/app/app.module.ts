@@ -1,38 +1,59 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CoursesPageComponent } from './courses-page/courses-page.component';
+import { NavMenuComponent } from './Nav-menu/nav-menu.component';
+import { HomeComponent } from './Home/home.component';
 import { CommonModule } from '@angular/common';
-import { CourseFilterPipe } from './pipes/courses-filter.pipe';
-import { CourseService } from './services/course.service';
-import { CourseFilterUniqueTopic } from './pipes/course-filter.unique-topic.pipe';
+import { CourseService } from './Services/course.service';
+import { IdentityService } from './Services/identity.service';
+import { TopicService } from './Services/topic.service';
+import { FormsModule } from '@angular/forms';
+import { CommonService } from './Services/common.service';
+import { TeacherService } from './Services/teacher.service';
+import { GroupService } from './Services/group.service';
+import { AdministratingGuard } from './Guards/Administrating.guard';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    CoursesPageComponent,
-    CourseFilterPipe,
-    CourseFilterUniqueTopic,
-  ],
+  declarations: [AppComponent, NavMenuComponent, HomeComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
-    FormsModule,
     CommonModule,
+    FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'allcourses', component: CoursesPageComponent },
+      {
+        path: 'allcourses',
+        loadChildren: () =>
+          import('./Courses/courses.module').then((m) => m.CoursesModule),
+      },
+      {
+        path: 'indentity',
+        loadChildren: () =>
+          import('./Identity/Identity.module').then((m) => m.IdentityModule),
+      },
+      {
+        path: 'administrating',
+        loadChildren: () =>
+          import('./Administrating/Administrating.module').then(
+            (m) => m.AdministratingModule
+          ),
+        canActivate: [AdministratingGuard],
+      },
     ]),
   ],
-  providers: [CourseService],
+  providers: [
+    CourseService,
+    GroupService,
+    IdentityService,
+    TopicService,
+    TeacherService,
+    CommonService,
+    AdministratingGuard,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -9,11 +9,13 @@ namespace EducationCenterCRM.DAL.Entities
 {
     public class Teacher : Person
     {
-       
+
         [Required]
         public string Bio { get; set; }
         [Required]
         public string LinkToProfile { get; set; }
+        public List<Course> Courses { get; set; } = new List<Course>();
+        
 
     }
 }

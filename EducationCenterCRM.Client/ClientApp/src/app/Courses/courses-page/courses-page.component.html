@@ -1,0 +1,71 @@
+<div>
+  <p *ngIf="!courses"><em>Loading...</em></p>
+  <div class="row" style="margin-top: 5%; margin-left: 5%" *ngIf="courses">
+    <div class="col-2" style="align-items: center">
+      <app-courses-filter
+        (FilteredResultEvent)="ChangeByFilter($event)"
+      ></app-courses-filter>
+    </div>
+    <div class="col-9">
+      <div class="input-group mb-3">
+        <div style="width: 500px" class="mb-3">
+          <app-courses-search
+            (SearchResultEvent)="ChangeBySearch($event)"
+          ></app-courses-search>
+        </div>
+      </div>
+
+      <div
+        class="card mb-3"
+        style="max-width: 90%; height: 150px"
+        *ngFor="let course of courses"
+      >
+        <div class="row g-0">
+          <div class="col-md-3">
+            <img
+              src="{{ course.imageUrl }}"
+              class="img-fluid rounded-start"
+              style="height: 150px; width: 300px"
+              alt="..."
+            />
+          </div>
+          <div class="col-md-9">
+            <div class="card-body">
+              <h5 class="card-title">{{ course.title }}</h5>
+              <p
+                class="card-text"
+                style="
+                  white-space: nowrap; /* Запрещаем перенос строк */
+                  overflow: hidden; /* Обрезаем все, что не помещается в область */
+                  text-overflow: ellipsis; /* Добавляем многоточие */
+                "
+              >
+                {{ course.description }}
+              </p>
+              <div class="card-text d-flex justify-content-between">
+                <small class="text-muted"> {{ course.topicTitle }}</small>
+                <small class="text-muted">Price: {{ course.price }}$</small>
+                <small class="text-muted"
+                  >Duration: {{ course.durationWeeks }} weeks</small
+                >
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  (click)="SignUp(course.id)"
+                >
+                  Subscibe
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-left: 70%">
+        <app-Pagination
+          [pagesAmount]="pageAmount"
+          (newItemEvent)="MoveToPage($event)"
+        ></app-Pagination>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,13 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.BLL", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.DAL", "EducationCenterCRM.DAL\EducationCenterCRM.DAL.csproj", "{D8C6E9B0-F6FB-4504-92D4-81EF160F7D31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.WebApi", "EducationCenterCRM.WebApi\EducationCenterCRM.WebApi.csproj", "{6FD15F21-3219-4FDF-A888-203AB36C4608}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.WebApi.IntegrationTests", "EducationCenterCRM.WebApi.IntegrationTests\EducationCenterCRM.WebApi.IntegrationTests.csproj", "{5A0443C2-112D-4128-A189-9C33EC7CA23C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F8D8ED02-94EA-4D2F-BD14-FA824F4B9E09}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenterCRM.Client", "EducationCenterCRM.Client\EducationCenterCRM.Client.csproj", "{5AA8C640-1305-484E-A0BF-BEB2E01F270E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationCenter.UnitTests", "EducationCenter.UnitTests\EducationCenter.UnitTests.csproj", "{9F297766-E4E0-418E-A866-64000EE7AB5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,24 +25,17 @@ Global
 		{D8C6E9B0-F6FB-4504-92D4-81EF160F7D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8C6E9B0-F6FB-4504-92D4-81EF160F7D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8C6E9B0-F6FB-4504-92D4-81EF160F7D31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6FD15F21-3219-4FDF-A888-203AB36C4608}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A0443C2-112D-4128-A189-9C33EC7CA23C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A0443C2-112D-4128-A189-9C33EC7CA23C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A0443C2-112D-4128-A189-9C33EC7CA23C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A0443C2-112D-4128-A189-9C33EC7CA23C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AA8C640-1305-484E-A0BF-BEB2E01F270E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F297766-E4E0-418E-A866-64000EE7AB5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F297766-E4E0-418E-A866-64000EE7AB5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F297766-E4E0-418E-A866-64000EE7AB5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F297766-E4E0-418E-A866-64000EE7AB5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{5A0443C2-112D-4128-A189-9C33EC7CA23C} = {F8D8ED02-94EA-4D2F-BD14-FA824F4B9E09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {194DE9E2-1AD6-490E-B2F9-1B7C7F82F4E4}

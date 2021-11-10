@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="col-2"></div>
+  <div class="col-10" style="margin-top: 10%; margin-left: 5%">
+    <h1>Requests:</h1>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a
+          [ngClass]="isResultOpenRequests ? 'nav-link active' : 'nav-link '"
+          (click)="GetAllOpen(1)"
+          aria-current="page"
+          >Open</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          [ngClass]="isResultOpenRequests ? 'nav-link' : 'nav-link active'"
+          (click)="GetAllClosed(1)"
+          >Closed</a
+        >
+      </li>
+    </ul>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Created</th>
+          <th scope="col">Student Name</th>
+          <th scope="col">Course Title</th>
+          <th scope="col">Studing type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let request of requestsList.requests; let i = index"
+          (click)="
+            OffcanvasInfo(request.id, request.studentId, request.courseId)
+          "
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasWithBackdrop"
+          aria-controls="offcanvasWithBackdrop"
+        >
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ request.created }}</td>
+          <td>{{ request.studentFullName }}</td>
+          <td>{{ request.courseName }}</td>
+          <td>{{ request.studingType }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasWithBackdrop"
+  aria-labelledby="offcanvasWithBackdropLabel"
+>
+  <div class="offcanvas-header">
+    <h3 class="offcanvas-title" id="offcanvasWithBackdropLabel">
+      Student info:
+    </h3>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div *ngIf="student">
+    <div class="offcanvas-body">
+      <p>{{ student.name }}</p>
+      <p>{{ student.lastname }}</p>
+      <p>{{ student.email }}</p>
+      <p>{{ student.birthDate | date }}</p>
+      <div class="mb-3" style="width: 80%">
+        <h3>Avalible groups:</h3>
+        <select
+          (click)="GetAvalibleGroups()"
+          class="form-select"
+          aria-label="Default select example"
+          [(ngModel)]="pickedGroupId"
+        >
+          <option *ngFor="let group of avalibleGroups" value="{{ group.id }}">
+            {{ group.title }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary" (click)="Save()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

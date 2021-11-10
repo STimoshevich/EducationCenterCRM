@@ -1,14 +1,8 @@
 ﻿using EducationCenterCRM.BLL.Installers;
 using EducationCenterCRM.DAL.Entities;
-using EducationCenterCRM.DAL.Infrastructure.Interfaces;
 using EducationCenterCRM.DAL.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EducationCenterCRM.WebApi.Installers
 {
@@ -16,11 +10,11 @@ namespace EducationCenterCRM.WebApi.Installers
     {
         public void InstallServiecs(IConfiguration configuration, IServiceCollection services)
         {
-            services.AddScoped<IRepository<Student>, StudentsRepository>();
-            services.AddScoped<IRepository<Group>, GroupsRepository>();
-            services.AddScoped<IRepository<Course>, CoursesRepository>();
-            services.AddScoped<IRepository<Topic>, TopicsRepository>();
-            services.AddScoped<IRepository<Teacher>, TeachersRepository>();
+            services.AddScoped<AbstractRepository<Student>, StudentsRepository>();
+            services.AddScoped<AbstractRepository<Group>, GroupsRepository>();
+            services.AddScoped<AbstractRepository<Course>, CoursesRepository>();
+            services.AddScoped<AbstractRepository<Topic>, TopicsRepository>();
+            services.AddScoped<AbstractRepository<Teacher>, TeachersRepository>();
         }
     }
 }

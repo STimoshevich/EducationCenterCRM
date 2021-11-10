@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
 using Serilog;
+using EducationCenterCRM.BLL.DTO;
 
 namespace EducationCenterCRM.WebApi.Controllers.V1
 {
@@ -22,7 +23,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
             this.identityService = identityService;
         }
 
-        [HttpPost(ApiRoutes.Identity.Register)]
+        [HttpPost("reg")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
             if (!ModelState.IsValid)
@@ -37,7 +38,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
 
             try
             {
-                var authResponse = await identityService.RegisterAsync(request.Email, request.Password);
+                var authResponse = await identityService.RegisterAsync(request);
                 if (!authResponse.Success)
                     return BadRequest(new AuthFailedResponse
                     {
@@ -62,7 +63,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
           
         }
 
-        [HttpPost(ApiRoutes.Identity.Login)]
+        [HttpPost("log")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             if (!ModelState.IsValid)
@@ -101,7 +102,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
 
         }
 
-        [HttpPost(ApiRoutes.Identity.Refresh)]
+        [HttpPost("ref")]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
         {
             if (!ModelState.IsValid)
@@ -113,7 +114,7 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
             }
             try
             {
-                var authResponse = await identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
+                var authResponse = await identityService.RefreshTokenAsync(request);
                 if (!authResponse.Success)
                     return BadRequest(new AuthFailedResponse
                     {
@@ -138,13 +139,6 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
            
         }
 
-        [HttpPost(ApiRoutes.Identity.Logout)]
-        public async Task<IActionResult> Logout()
-        {
-            await identityService.LogoutAsync();
-            return Ok();
-
-
-        }
+       
     }
 }

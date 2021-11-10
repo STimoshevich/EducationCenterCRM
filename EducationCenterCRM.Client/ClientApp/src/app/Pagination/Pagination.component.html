@@ -1,0 +1,41 @@
+<div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item">
+        <!-- <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">elements</span>
+          <select
+            (change)="setCurrentPage(1, $event)"
+            class="form-select"
+            aria-label="Default select example"
+          >
+            <option value="{{ currentItemsPerPage }}">
+              {{ currentItemsPerPage }}
+            </option>
+            <option *ngFor="let n of itemsPerPageList" value="{{ n }}">
+              {{ n }}
+            </option>
+          </select>
+        </div> -->
+      </li>
+      <li [ngClass]="currentPage === 1 ? 'page-item disabled' : 'page-item'">
+        <a class="page-link" (click)="setCurrentPage(currentPage - 1)"
+          >Previous</a
+        >
+      </li>
+      <li
+        *ngFor="let n of [].constructor(pagesAmount); let i = index"
+        [ngClass]="currentPage === i + 1 ? ' page-item active' : ' page-item'"
+      >
+        <a class="page-link" (click)="setCurrentPage(i + 1)">{{ i + 1 }}</a>
+      </li>
+      <li
+        [ngClass]="
+          currentPage === pagesAmount ? 'page-item disabled' : 'page-item'
+        "
+      >
+        <a class="page-link" (click)="setCurrentPage(currentPage + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>

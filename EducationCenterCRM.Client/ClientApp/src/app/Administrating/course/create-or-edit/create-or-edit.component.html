@@ -1,0 +1,92 @@
+<div style="margin-left: 25%; margin-top: 5%; width: 50%">
+  <div class="mb-3" style="width: 5%">
+    <h1 *ngIf="isCreate">Create course</h1>
+    <h1 *ngIf="!isCreate">Edit course</h1>
+  </div>
+  <form [formGroup]="courseForm" *ngIf="courseForm" (ngSubmit)="Submit()">
+    <div style="width: 30%">
+      <div class="mb-3">
+        <label class="form-label">Id</label>
+        <input
+          type="email"
+          class="form-control"
+          readonly
+          formControlName="id"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Price</label>
+        <input type="text" class="form-control" formControlName="price" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Duration week</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="durationWeeks"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Topic</label>
+        <select
+          (click)="GetTopicNames()"
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="topicTitle"
+        >
+          <option value="{{ course.topicTitle }}">
+            {{ course.topicTitle }}
+          </option>
+          <option *ngFor="let title of topicTitles" value="{{ title }}">
+            {{ title }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Course level</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="courseLevel"
+        >
+          <option value="{{ course.courseLevel }}">
+            {{ course.courseLevel }}
+          </option>
+          <option *ngFor="let lvl of courseLvlNames" value="{{ lvl }}">
+            {{ lvl }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input type="email" class="form-control" formControlName="title" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Image URL</label>
+      <input type="email" class="form-control" formControlName="imageUrl" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea
+        class="form-control"
+        style="height: 100%"
+        rows="3"
+        formControlName="description"
+      ></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Program</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        formControlName="program"
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>

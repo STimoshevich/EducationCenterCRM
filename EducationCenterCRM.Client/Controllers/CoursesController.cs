@@ -1,7 +1,11 @@
-﻿using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
+﻿using EducationCenterCRM.BLL.DTO;
+using EducationCenterCRM.BLL.Services.Interfaces;
+using EducationCenterCRM.DAL.Filteres.CourseFilters;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using EducationCenterCRM.BLL.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EducationCenterCRM.WebApi.Controllers.V1
 {
@@ -19,99 +23,104 @@ namespace EducationCenterCRM.WebApi.Controllers.V1
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]int page = 1,int itemsPerPage = 4)
         {
-            try
-            {
-                var result = await courseService.GetAllAsync();
+    
+
+                var result = await courseService.GetAllAsync(page,itemsPerPage);
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex?.Message);
-                Log.Error(ex?.InnerException?.Message);
-            }
-            return BadRequest();
-           
+        
+ 
+
         }
 
-        //[HttpGet("[controller]/{id}")]
-        //public async Task<IActionResult> GetById(int id)
-        //{
+        [HttpGet("getbyfilter")]
+        public async Task<IActionResult> GetAllByFilter([FromQuery] CourseFilter filter, int page = 1, int itemsPerPage = 4)
+        {
+            var coursesResult = await courseService.GetByFilter(filter,page,itemsPerPage);
+            return Ok(coursesResult);
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string searchString, int page = 1, int itemsPerPage = 4)
+        {
+            var coursesResult = await courseService.SearchAsync(searchString,page,itemsPerPage);
+            return Ok(coursesResult);
+        }
 
 
-        //    try
-        //    {
-        //        var result = await courseService.GetByIdAsync(id);
-        //        return result is not null ? Ok(result) : NotFound();
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        Log.Error(ex?.Message);
-        //        Log.Error(ex?.InnerException?.Message);
+        [HttpGet("courselvlNames")]
+        public IActionResult GetAllCourseLvls()
+        {
+            return Ok(courseService.GetAllCourseLvls());
+        }
 
-        //        return BadRequest();
-        //    }
 
-        //}
+       
+
+        [HttpGet("alltitles")]
+        public async Task<IActionResult> GetAllTitlesAsync()
+        {
+            return Ok(await courseService.GetAllTitlesWithId());
+        }
+
+
+        [HttpGet("getbyid")]
+        public async Task<IActionResult> GetById(int id)
+        {
+
+                var result = await courseService.GetByIdAsync(id);
+                return result is not null ? Ok(result) : NotFound();
+   
+
+        }
+
+
 
         [HttpDelete]
         public async Task<IActionResult> DeleteById([FromQuery] int id)
         {
-            try
-            {
+
                 var deleted = await courseService.DeleteByIdAsync(id);
                 return deleted ? Ok() : NotFound();
-            }
-            catch (Exception ex)
-            {
 
-                Log.Error(ex?.Message);
-                Log.Error(ex?.InnerException?.Message);
-
-                return BadRequest();
-            }
 
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNew([FromBody] CourseRequest courseRequest)
+        public async Task<IActionResult> CreateNew([FromBody] CourseDTO courseRequest)
         {
-            try
-            {
+
+
                 var created = await courseService.AddNewAsync(courseRequest);
                 return created ? Ok() : BadRequest(new { error = "Unable to create course" });
-            }
-            catch (Exception ex)
-            {
 
-                Log.Error(ex?.Message);
-                Log.Error(ex?.InnerException?.Message);
-
-                return BadRequest();
-            }
 
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromQuery] int Id, [FromBody] CourseRequest courseRequest)
+        [HttpPut()]
+        public async Task<IActionResult> Update([FromBody] CourseDTO courseRequest)
         {
-            var chek = ModelState;
-            try
-            {
-                var updated = await courseService.UpdateAsync(Id, courseRequest);
-                return updated ? Ok() : NotFound();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex?.Message);
-                Log.Error(ex?.InnerException?.Message);
 
-                return BadRequest();
-            }
+                var updated = await courseService.UpdateAsync(courseRequest);
+                return updated ? Ok() : NotFound();
+
+
 
         }
+
+        [HttpGet("getteachers")]
+        public async Task<IActionResult> GetCourseTeachers(int courseId)
+        {
+            return Ok(await courseService.AllTeachersNamesWithIdbyCourse(courseId));
+
+        }
+
+
+
+
+
     }
 }

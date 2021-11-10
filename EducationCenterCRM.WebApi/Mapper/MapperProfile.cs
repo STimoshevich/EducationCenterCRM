@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
 using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
+using EducationCenterCRM.BLL.DTO;
 using EducationCenterCRM.DAL.Entities;
 using System.Collections.Generic;
 
@@ -10,21 +11,21 @@ namespace EducationCenterCRM.PresentationLayer.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<Student,StudentRequest>().ReverseMap();
-            CreateMap<Student, StudentResponse>().ReverseMap();
+            CreateMap<Student,StudentDTO>().ReverseMap();
+            CreateMap<Student, StudentDTO>().ReverseMap();
 
-            CreateMap<Group, GroupRequest>().ReverseMap();
-            CreateMap<Group, GroupResponse>().ReverseMap();
+            CreateMap<Group, GroupDTO>().ReverseMap();
+            CreateMap<Group, GroupDTO>().ReverseMap();
 
-            CreateMap<Topic, TopicRequest>().ReverseMap();
-            CreateMap<Topic, TopicResponse>().ReverseMap();
+            CreateMap<Topic, TopicDTO>().ReverseMap();
+            CreateMap<Topic, TopicDTO>().ReverseMap();
 
-            CreateMap<Course, CourseRequest>().ReverseMap();
-            CreateMap<Course, CourseResponse>().ReverseMap();
+            CreateMap<Course, CourseDTO>().ReverseMap();
+            CreateMap<Course, CourseDTO>().ReverseMap();
 
 
-            CreateMap<Teacher, TeacherRequest>().ReverseMap();
-            CreateMap<Teacher, TeacherResponse>().ReverseMap();
+            CreateMap<Teacher, TeacherDTO>().ReverseMap();
+            CreateMap<Teacher, TeacherDTO>().ReverseMap();
         }
     }
 }

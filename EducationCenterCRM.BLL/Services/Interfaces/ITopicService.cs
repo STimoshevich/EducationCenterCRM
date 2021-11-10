@@ -1,19 +1,16 @@
-﻿using EducationCenterCRM.BLL.Contracts.V1.RequestModels;
-using EducationCenterCRM.BLL.Contracts.V1.ResponseModels;
-using System;
+﻿using EducationCenterCRM.BLL.DTO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EducationCenterCRM.BLL.Services.Interfaces
 {
     public interface ITopicService
     {
-        Task<List<TopicResponse>> GetAllAsync();
-        Task<bool> AddNewAsync(TopicRequest topicRequest);
+        Task<List<TopicDTO>> GetAllAsync();
+        Task<IEnumerable<string>> GetAllTitles();
+        Task<bool> AddNewAsync(TopicDTO topicRequest);
         Task<bool> DeleteByIdAsync(int id);
-        Task<TopicResponse> GetByIdAsync(int id);
-        Task<bool> UpdateAsync(int id, TopicRequest topicRequest);
+        Task<TopicDTO> GetByIdAsync(int id);
+        Task<bool> UpdateAsync(int id, TopicDTO topicRequest);
     }
 }

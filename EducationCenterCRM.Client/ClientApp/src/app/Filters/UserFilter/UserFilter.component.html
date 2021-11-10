@@ -1,0 +1,18 @@
+<div class="mb-3" style="margin-top: 10%">
+  <h5>Roles:</h5>
+  <select
+    [(ngModel)]="userFilter.roleId"
+    (change)="FieldChanged()"
+    (click)="GetAllRoles()"
+    class="form-select"
+    aria-label="Default select example"
+  >
+    <option></option>
+    <option
+      *ngFor="let roleNameWithId of rolesNamesWithId"
+      value="{{ roleNameWithId.id }}"
+    >
+      {{ roleNameWithId.name }}
+    </option>
+  </select>
+</div>

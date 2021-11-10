@@ -1,0 +1,34 @@
+<div class="bg-image" style="height: 100vh; background-size: cover">
+  <div class="row" style="margin-top: 10%; margin-left: 30%; width: 700px">
+    <div class="col-2"></div>
+    <div class="col-7">
+      <div class="mb-3">
+        <h1>Login</h1>
+      </div>
+      <div class="mb-3" *ngIf="requestErrors.length > 0">
+        <small *ngFor="let erorr of requestErrors">
+          <p>{{ erorr }}</p>
+        </small>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="Submit()">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="text" class="form-control" formControlName="email" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password"
+          />
+        </div>
+
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-3"></div>
+  </div>
+</div>
